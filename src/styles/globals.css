@@ -8,6 +8,6 @@
   }
 
   body {
-    @apply mx-auto min-h-dvh max-w-screen-sm bg-gray-50 text-gray-950;
+    @apply mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 text-gray-950;
   }
 }
