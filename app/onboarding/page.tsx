@@ -1,71 +1,75 @@
 'use client'
 
 import OnBoardingBox from '~/components/ui/on-boarding-box'
-import { useState, useEffect } from 'react'
 import { Button } from '~/components/ui/button'
+import Carousel from '../../public/carousel'
+import { useState, useEffect } from 'react'
+
+const datas = [
+  {
+    title: '환영해요!',
+    message:
+      '산책은 목적지까지 경로 안내, 내 주변의 인기있는 장소를 확인할 수 있어요',
+  },
+  {
+    title: '목적지까지 경로 안내',
+    message:
+      '목적지가 있다면 장소 입력 후 경로를 선택해서 길찾기를 시작해 주세요',
+  },
+  {
+    title: '가볼만한 곳 찾기',
+    message: `산책 중 새로운 곳에 방문해보면 어떨까요? <br />
+    내 주변 인기 있는 장소를 확인해보세요!`,
+  },
+  {
+    title: '간편 로그인 후 산책 시작',
+    message: '카카오톡 계정으로 <br /> 빠른 로그인을 도와드릴게요!',
+  },
+]
 
 function OnBoardingPage() {
   const [active, setActive] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActive((pre) => (pre + 1) % 4)
-    }, 2000)
+      setActive((pre) => (pre + 1) % datas.length)
+    }, 2500)
     return () => clearInterval(interval)
-  })
+  }, [])
+
+  const handleActive = (index: number) => {
+    setActive(index)
+  }
 
   return (
     <div className="relative">
-      <img src="/og.png" className="absolute" />
-      <OnBoardingBox
-        title="환영해요!"
-        message="산책은 목적지까지 경로 안내, 내 주변의 인기있는 장소를 확인할 수 있어요"
-      />
-      <svg
-        className="absolute left-1/2 -mt-64 block h-32 w-44 -translate-x-1/2 transform"
-        viewBox="-17 0 60 40"
-      >
-        <rect
-          x={active === 0 ? '-10' : '0' && active === 1 ? '-10' : '0'}
-          y="0"
-          width={active === 0 ? '15' : '5'} // 선택된 요소는 길어짐
-          height="5"
-          rx="2.5"
-          ry="2.5" // 둥근 모서리
-          fill={active === 0 ? 'green' : 'grey'}
+      <div className="ml-[120px]">
+        <img
+          src="/text-icon.png"
+          className="absolute ml-[90px] mt-[70px] w-[30%] bg-transparent"
         />
-        <rect
-          x={active === 1 ? '0' : '10' && active === 2 ? '-10' : '10'}
-          y="0"
-          width={active === 1 ? '15' : '5'}
-          height="5"
-          rx="2.5"
-          ry="2.5" // 둥근 모서리
-          fill={active === 1 ? 'green' : 'grey'}
+        <img
+          src="/walking-icon.png"
+          className="absolute mt-[110px] w-[60%] bg-transparent"
         />
-        <rect
-          x={active === 2 ? '10' : '20' && active === 3 ? '-10' : '20'}
-          y="0"
-          width={active === 2 ? '15' : '5'}
-          height="5"
-          rx="2.5"
-          ry="2.5" // 둥근 모서리
-          fill={active === 2 ? 'green' : 'grey'}
-        />
-        <rect
-          x={active === 3 ? '20' : '30'}
-          y="0"
-          width={active === 3 ? '15' : '5'}
-          height="5"
-          rx="2.5"
-          ry="2.5" // 둥근 모서리
-          fill={active === 3 ? 'green' : 'grey'}
-        />
-      </svg>
+      </div>
+      {datas.map(
+        (data, index) =>
+          active === index && (
+            <OnBoardingBox
+              key={index}
+              title={data.title}
+              message={
+                <span dangerouslySetInnerHTML={{ __html: data.message }} />
+              }
+            />
+          ),
+      )}
+      <Carousel onClick={handleActive} />
       <Button
         variant="secondary"
         size="lg"
-        className="absolute left-1/2 -mt-44 h-24 w-full -translate-x-1/2 transform"
+        className="h-15 absolute left-1/2 -mt-[150px] w-[335px] -translate-x-1/2 transform"
       >
         카카오톡으로 로그인하기
       </Button>
