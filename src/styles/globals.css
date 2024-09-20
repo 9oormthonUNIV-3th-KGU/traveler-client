@@ -3,11 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    @apply bg-black;
-  }
-
   body {
-    @apply mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 text-gray-950;
+    @apply bg-black;
   }
 }
