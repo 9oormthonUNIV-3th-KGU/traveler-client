@@ -1,23 +1,31 @@
+import { forwardRef } from 'react'
 import { cn } from '~/utils/cn'
 
-function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn(
-        'flex flex-col items-center gap-3 rounded bg-white px-6 py-5 shadow',
-        className,
-      )}
-      {...props}
-    />
-  )
-}
+const Card = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        className={cn(
+          'flex flex-col rounded bg-white px-6 py-5 shadow',
+          className,
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  },
+)
+Card.displayName = 'Card'
 
 function CardTitle({
   className,
   ...props
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h1 className={cn('text-[22px] font-semibold', className)} {...props} />
+    <h1
+      className={cn('text-center text-[22px] font-semibold', className)}
+      {...props}
+    />
   )
 }
 
