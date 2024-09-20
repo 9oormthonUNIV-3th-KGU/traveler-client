@@ -1,9 +1,6 @@
 import { cn } from '~/utils/cn'
 
-function Card({
-  className,
-  ...props
-}: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) {
+function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
@@ -18,7 +15,7 @@ function Card({
 function CardTitle({
   className,
   ...props
-}: React.PropsWithChildren<React.HTMLAttributes<HTMLHeadElement>>) {
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h1 className={cn('text-[22px] font-semibold', className)} {...props} />
   )
@@ -27,7 +24,7 @@ function CardTitle({
 function CardDescription({
   className,
   ...props
-}: React.PropsWithChildren<React.HTMLAttributes<HTMLParagraphElement>>) {
+}: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
       className={cn('text-center font-medium text-gray-800', className)}
