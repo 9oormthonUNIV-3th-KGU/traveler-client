@@ -5,12 +5,13 @@ import Link from 'next/link'
 
 import Kakao from '~/assets/kakao.svg'
 import { buttonVariants } from '~/components/ui/button'
+import { ROUTE } from '~/constants/route'
 import { cn } from '~/utils/cn'
 
 function LoginButton() {
   return (
     <Link
-      href="/on-board"
+      href={ROUTE.ONBOARD}
       className={cn(
         buttonVariants(),
         'bg-[#FEE500] text-black hover:bg-[#FEE500]',

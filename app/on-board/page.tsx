@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import LogoMain from '~/assets/logo+main.svg'
 import { Card, CardDescription, CardTitle } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { ROUTE } from '~/constants/route'
 
 const steps = [
   {
@@ -48,7 +49,7 @@ export default function OnBoard() {
 
   const handleNext = () => {
     if (step === 3) {
-      router.push('/')
+      router.push(ROUTE.MAIN)
     } else if (step === 2 && !isLocationAllowed) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(() => {
@@ -56,7 +57,7 @@ export default function OnBoard() {
           setStep(step + 1)
         }, console.error)
       } else {
-        console.log('Geolocation is not supported by this browser.')
+        console.log('이 브라우저는 위치 정보를 지원하지 않아요.')
       }
     } else {
       setStep(step + 1)
