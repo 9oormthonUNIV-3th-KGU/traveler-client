@@ -11,7 +11,7 @@ import { cn } from '~/utils/cn'
 function LoginButton() {
   return (
     <Link
-      href={ROUTE.ONBOARD}
+      href={ROUTE.KAKAO_LOGIN}
       className={cn(
         buttonVariants(),
         'bg-[#FEE500] text-black hover:bg-[#FEE500]',
