@@ -67,7 +67,7 @@ export default function OnBoard() {
   return (
     <div className="flex h-dvh flex-col justify-center gap-8">
       <div className="relative flex w-full flex-col items-center">
-        <Image src={LogoMain} alt="산책" draggable={false} />
+        <Image src={LogoMain} alt="산책" width={640} draggable={false} />
         <Card className="absolute bottom-0 w-full">
           <CardTitle>{steps[step].title}</CardTitle>
           <CardDescription>{steps[step].description}</CardDescription>
