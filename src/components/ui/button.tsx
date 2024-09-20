@@ -1,10 +1,12 @@
+'use client'
+
 import * as React from 'react'
 import { cva, type VariantProps } from 'cva'
 
 import { cn } from '~/utils/cn'
 
 const buttonVariants = cva({
-  base: 'inline-flex items-center justify-center whitespace-nowrap rounded-[20px] font-semibold transition-colors disabled:bg-gray-300 disabled:text-white',
+  base: 'inline-flex items-center justify-center whitespace-nowrap rounded font-semibold transition-colors disabled:bg-gray-300 disabled:text-white',
   variants: {
     variant: {
       default: 'bg-primary-500 text-white hover:bg-primary-600',

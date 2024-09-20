@@ -1,11 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
-  content: [
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-    './public/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', './src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       fontFamily: {
@@ -48,8 +44,10 @@ const config: Config = {
         },
       },
       boxShadow: {
-        'all-sides':
-          '0 4px 6px rgba(0, 0, 0, 0.05), 0 -4px 6px rgba(0, 0, 0, 0.05), 4px 0 6px rgba(0, 0, 0, 0.05), -4px 0 6px rgba(0, 0, 0, 0.05)',
+        DEFAULT: '0px 0px 10px 0px rgba(0, 0, 0, 0.25)',
+      },
+      borderRadius: {
+        DEFAULT: '20px',
       },
     },
   },

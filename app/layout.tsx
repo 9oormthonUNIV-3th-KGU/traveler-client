@@ -24,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={cn(pretendard.variable, 'font-sans antialiased')}>
-        {children}
+        <div className="mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 px-5 text-gray-950">
+          {children}
+        </div>
       </body>
     </html>
   )
