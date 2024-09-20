@@ -9,6 +9,7 @@ import LogoMain from '~/assets/logo+main.svg'
 import { Card, CardDescription, CardTitle } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 import { ROUTE } from '~/constants/route'
+import { OnBoardIndicator } from '~/components/on-board-indicator'
 
 const steps = [
   {
@@ -69,7 +70,7 @@ export default function OnBoard() {
   }
 
   return (
-    <div className="flex h-dvh flex-col justify-center gap-8">
+    <div className="flex h-dvh flex-col justify-center">
       <div className="relative flex w-full flex-col items-center">
         <Image src={LogoMain} alt="산책" width={640} draggable={false} />
         <Card
@@ -88,6 +89,9 @@ export default function OnBoard() {
             ))}
           </div>
         </Card>
+      </div>
+      <div className="mb-2 mt-6 flex w-full items-center justify-center p-2">
+        <OnBoardIndicator step={step} />
       </div>
       <Button onClick={handleNext}>
         {step === 4
