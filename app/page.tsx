@@ -7,7 +7,7 @@ import { Card, CardDescription, CardTitle } from '~/components/ui/card'
 
 export default function Home() {
   return (
-    <div className="flex h-dvh flex-col justify-center">
+    <div className="flex min-h-dvh flex-col justify-center px-5">
       <div className="relative flex w-full flex-col items-center">
         <Image src={LogoMain} alt="산책" width={640} draggable={false} />
         <Card className="absolute bottom-0 w-full items-center gap-3">
