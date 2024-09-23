@@ -2,7 +2,7 @@ import { NavigateCard } from '~/components/navigate-card'
 
 export default function Navigate() {
   return (
-    <div className="relative min-h-dvh px-5">
+    <div className="relative min-h-dvh">
       <div className="grid w-full grid-cols-2 justify-items-center gap-5 sm:grid-cols-3">
         <NavigateCard index={1} type={11} distance={115} description="직진" />
         <NavigateCard index={2} type={12} distance={115} description="좌회전" />

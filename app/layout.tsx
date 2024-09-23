@@ -14,6 +14,14 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: '산책',
   description: '',
+  openGraph: {
+    images: [
+      {
+        url: '/og.png',
+        alt: '산책',
+      },
+    ],
+  },
 }
 
 export default function RootLayout({
