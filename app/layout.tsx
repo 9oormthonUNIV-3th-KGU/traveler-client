@@ -15,12 +15,7 @@ export const metadata: Metadata = {
   title: '산책',
   description: '',
   openGraph: {
-    images: [
-      {
-        url: '/og.png',
-        alt: '산책',
-      },
-    ],
+    images: '/og.png',
   },
 }
 
@@ -31,6 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script
+          src={`https://apis.openapi.sk.com/tmap/vectorjs?version=1&appKey=${process.env.NEXT_PUBLIC_TMAP_APP_KEY}`}
+        />
+      </head>
       <body className={cn(pretendard.variable, 'font-sans antialiased')}>
         <div className="mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 text-gray-950">
           {children}
