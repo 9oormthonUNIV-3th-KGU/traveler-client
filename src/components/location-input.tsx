@@ -1,20 +1,18 @@
 import { Card } from '~/components/ui/card'
 import Input from '~/components/ui/input'
-import Image from 'next/image'
-import { Button } from '~/components/ui/button'
-import Gps from '~/assets/gps-green.svg'
+import React from 'react'
 
 interface LocationInputProps {
   inputs: string[]
   onChange: (index: number, event: React.ChangeEvent<HTMLInputElement>) => void
+  icon: React.ReactNode
 }
 
 export default function LocationInput({
   inputs,
   onChange,
+  icon,
 }: LocationInputProps) {
-  const gpsIcon = <Image src={Gps} alt="gps" width={40} />
-
   return (
     <>
       <div className="flex items-center justify-center">
@@ -27,7 +25,7 @@ export default function LocationInput({
           <div key={index}>
             <Input
               value={place}
-              icon={index === 0 ? gpsIcon : undefined}
+              icon={index === 0 ? icon : undefined}
               onChange={(e) => onChange(index, e)}
             />
             {index !== inputs.length - 1 && (
@@ -36,7 +34,6 @@ export default function LocationInput({
           </div>
         ))}
       </Card>
-      <Button className="mt-10 h-[70px] w-full text-3xl">길 찾기</Button>
     </>
   )
 }

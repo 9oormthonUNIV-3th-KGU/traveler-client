@@ -4,42 +4,40 @@ import { useState, useEffect } from 'react'
 import { Button } from '~/components/ui/button'
 import { buttonVariants } from '~/components/ui/button'
 import { cn } from '~/utils/cn'
+import { ROUTE } from '~/constants/route'
 
 import Image from 'next/image'
 import Link from 'next/link'
+import Gps from '~/assets/gps-green.svg'
 
 import TopBar from '~/components/top-bar'
 import LocationInput from '~/components/location-input'
 import PopularLocationRank from '~/components/popular-location-rank'
 import Main from '~/assets/main.svg'
 import LocationPermissionButton from '~/components/location-permission-button'
-
-const location = ['출발지 입력', '도착지 입력']
+import { TMap } from '~/components/t-map'
 
 export default function Home() {
-  const [inputs, setInputs] = useState(location)
   const [isLocationAllowed, setIsLocationAllowed] = useState(false)
+  const [inputs, setInputs] = useState(['출발지 입력', '도착지 입력'])
+  const [currentLocation, setCurrentLocation] = useState<{
+    latitude: number
+    longitude: number
+  } | null>(null)
+
+  const gpsIcon = <Image src={Gps} alt="gps" width={40} />
 
   useEffect(() => {
-    const checkLocationPermission = async () => {
-      const result = await navigator.permissions.query({ name: 'geolocation' })
+    navigator.permissions
+      .query({ name: 'geolocation' })
+      .then((result) => {
+        setIsLocationAllowed(result.state === 'granted')
 
-      if (result.state === 'granted') {
-        setIsLocationAllowed(true)
-      } else if (result.state === 'denied') {
-        setIsLocationAllowed(false)
-      }
-
-      result.onchange = () => {
-        if (result.state === 'granted') {
-          setIsLocationAllowed(true)
-        } else {
-          setIsLocationAllowed(false)
-        }
-      }
-    }
-
-    checkLocationPermission()
+        result.onchange = () => setIsLocationAllowed(result.state === 'granted')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }, [])
 
   const handleLocationPermission = () => {
@@ -59,6 +57,22 @@ export default function Home() {
     }
   }
 
+  const handleGpsClick = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords
+          setCurrentLocation({ latitude, longitude })
+        },
+        (error) => {
+          console.error('현재 위치를 가져오지 못했습니다.', error)
+        },
+      )
+    } else {
+      console.log('이 브라우저는 위치 정보를 지원하지 않습니다.')
+    }
+  }
+
   const handleInputChange = (
     index: number,
     event: React.ChangeEvent<HTMLInputElement>,
@@ -69,14 +83,35 @@ export default function Home() {
   }
 
   return (
-    <>
+    <div className="p-7">
       <TopBar />
-      <LocationInput inputs={inputs} onChange={handleInputChange} />
+      <LocationInput
+        inputs={inputs}
+        onChange={handleInputChange}
+        icon={<button onClick={handleGpsClick}>{gpsIcon}</button>}
+      />
+      <Link
+        href={{
+          pathname: ROUTE.NAVIGATE,
+          query: {
+            from: inputs[0],
+            to: inputs[1],
+          },
+        }}
+      >
+        <Button className="mt-10 h-[70px] w-full text-3xl">길 찾기</Button>
+      </Link>
       <div className="flex items-center justify-center">
         <span className="mb-5 mt-12 text-center text-3xl text-gray-900">
           내 주변 인기있는 장소
         </span>
       </div>
+      <TMap
+        currentLocation={currentLocation}
+        size="small"
+        border="rounded"
+        shadow="shadow"
+      />
       <PopularLocationRank />
       {!isLocationAllowed && (
         <div className="mt-3 text-center text-2xl text-gray-700">
@@ -98,6 +133,6 @@ export default function Home() {
       </Link>
       <Image src={Main} alt="main" />
       <LocationPermissionButton onClick={handleLocationPermission} />
-    </>
+    </div>
   )
 }
