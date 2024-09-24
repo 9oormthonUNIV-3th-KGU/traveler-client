@@ -38,7 +38,7 @@ export default function Home() {
 
   const gpsIcon = <Image src={Gps} alt="gps" width={40} />
 
-  const router = useRouter() // useRouter 훅 사용
+  const router = useRouter()
 
   useEffect(() => {
     navigator.permissions
@@ -52,48 +52,6 @@ export default function Home() {
         console.error(error)
       })
   }, [])
-
-  const handleLocationPermission = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        () => {
-          setIsLocationAllowed(true)
-          console.log('위치 정보가 허용되었습니다.')
-        },
-        () => {
-          setIsLocationAllowed(false)
-          console.error('위치 정보 허용이 거부되었습니다.')
-        },
-      )
-    } else {
-      console.log('이 브라우저는 위치 정보를 지원하지 않습니다.')
-    }
-  }
-
-  const handleGpsClick = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords
-          setCurrentLocation({ latitude, longitude })
-        },
-        (error) => {
-          console.error('현재 위치를 가져오지 못했습니다.', error)
-        },
-      )
-    } else {
-      console.log('이 브라우저는 위치 정보를 지원하지 않습니다.')
-    }
-  }
-
-  const handleInputChange = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newInputs = [...inputs]
-    newInputs[index] = event.target.value
-    setInputs(newInputs)
-  }
 
   const handleGeocoding = async (
     address: string,
@@ -124,6 +82,87 @@ export default function Home() {
     } catch (error) {
       console.error('요청 실패', error)
     }
+  }
+
+  const handleReverseGeocoding = async (
+    latitude: number,
+    longitude: number,
+  ) => {
+    const appKey = 'TTlRjX8uuV5HqbcQObDKesvd32lp4L39MAVEi4ha'
+    const url = `https://apis.openapi.sk.com/tmap/geo/reversegeocoding?version=1&lat=${latitude}&lon=${longitude}&output=json&coordType=WGS84GEO&appKey=${appKey}`
+
+    try {
+      const response = await fetch(url)
+      const data = await response.json()
+
+      if (data && data.addressInfo) {
+        const address = data.addressInfo.fullAddress
+        return address
+      } else {
+        console.error('주소를 찾을 수 없습니다.')
+        return ''
+      }
+    } catch (error) {
+      console.error(error)
+      return ''
+    }
+  }
+
+  const handleLocationPermission = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          setIsLocationAllowed(true)
+          console.log('위치 정보가 허용되었습니다.')
+        },
+        () => {
+          setIsLocationAllowed(false)
+          console.error('위치 정보 허용이 거부되었습니다.')
+        },
+      )
+    } else {
+      console.log('이 브라우저는 위치 정보를 지원하지 않습니다.')
+    }
+  }
+
+  const handleGpsClick = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords
+          setCurrentLocation({ latitude, longitude })
+
+          const address = await handleReverseGeocoding(latitude, longitude)
+          if (address) {
+            setInputs((prevInputs) => {
+              const newInputs = [...prevInputs]
+              newInputs[0] = address
+              return newInputs
+            })
+          }
+        },
+        (error) => {
+          console.error('현재 위치를 가져오지 못했습니다.', error)
+        },
+      )
+    } else {
+      console.log('이 브라우저는 위치 정보를 지원하지 않습니다.')
+    }
+  }
+
+  const handleInputChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newInputs = [...inputs]
+    newInputs[index] = event.target.value
+    setInputs(newInputs)
+  }
+
+  const handleData = (data: string, index: number) => {
+    const newInputs = [...inputs]
+    newInputs[index] = data
+    setInputs(newInputs)
   }
 
   const handleSearchClick = async () => {
@@ -164,6 +203,7 @@ export default function Home() {
         inputs={inputs}
         onChange={handleInputChange}
         icon={<button onClick={handleGpsClick}>{gpsIcon}</button>}
+        onSendData={handleData}
       />
       <Button
         onClick={handleSearchClick}
