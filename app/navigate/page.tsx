@@ -1,17 +1,22 @@
 import { TMap } from '~/components/t-map'
+import { NavigateHeader } from '~/components/navigate-header'
 
 export default function Navigate({
   searchParams,
 }: {
   searchParams: {
-    start: string
-    end: string
+    from: string
+    to: string
   }
 }) {
   return (
     <div className="relative min-h-dvh">
-      {searchParams.start}
-      {searchParams.end}
+      <NavigateHeader
+        from={searchParams.from}
+        to={searchParams.to}
+        time={12}
+        distance={794}
+      />
       <TMap />
     </div>
   )
