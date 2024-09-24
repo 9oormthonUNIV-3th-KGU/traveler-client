@@ -1,10 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '~/components/ui/button'
-import { buttonVariants } from '~/components/ui/button'
 import { cn } from '~/utils/cn'
-import { ROUTE } from '~/constants/route'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -25,7 +24,21 @@ export default function Home() {
     longitude: number
   } | null>(null)
 
+  const [startLocation, setStartLocation] = useState<{
+    latitude: number
+    longitude: number
+  } | null>(null)
+
+  const [endLocation, setEndLocation] = useState<{
+    latitude: number
+    longitude: number
+  } | null>(null)
+
+  const [isLoading, setIsLoading] = useState(false)
+
   const gpsIcon = <Image src={Gps} alt="gps" width={40} />
+
+  const router = useRouter() // useRouter 훅 사용
 
   useEffect(() => {
     navigator.permissions
@@ -82,6 +95,68 @@ export default function Home() {
     setInputs(newInputs)
   }
 
+  const handleGeocoding = async (
+    address: string,
+    setLocation: React.Dispatch<
+      React.SetStateAction<{ latitude: number; longitude: number } | null>
+    >,
+  ) => {
+    const appKey = 'TTlRjX8uuV5HqbcQObDKesvd32lp4L39MAVEi4ha'
+    const url = `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?version=1&format=json&appKey=${appKey}&fullAddr=${encodeURIComponent(
+      address,
+    )}`
+
+    try {
+      const response = await fetch(url)
+      const data = await response.json()
+
+      if (data.coordinateInfo && data.coordinateInfo.coordinate.length > 0) {
+        const result = data.coordinateInfo.coordinate[0]
+        const latitude = result.lat.length > 0 ? result.lat : result.newLat
+        const longitude = result.lon.length > 0 ? result.lon : result.newLon
+        setLocation({
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+        })
+      } else {
+        console.error('결과를 찾을 수 없습니다.')
+      }
+    } catch (error) {
+      console.error('요청 실패', error)
+    }
+  }
+
+  const handleSearchClick = async () => {
+    setIsLoading(true)
+
+    if (inputs[0]) {
+      await handleGeocoding(inputs[0], setStartLocation)
+    }
+    if (inputs[1]) {
+      await handleGeocoding(inputs[1], setEndLocation)
+    }
+
+    setIsLoading(false)
+
+    if (startLocation && endLocation) {
+      const startX = startLocation?.longitude?.toString() || ''
+      const startY = startLocation?.latitude?.toString() || ''
+      const endX = endLocation?.longitude?.toString() || ''
+      const endY = endLocation?.latitude?.toString() || ''
+
+      const params = new URLSearchParams({
+        from: inputs[0],
+        to: inputs[1],
+        startX: startX,
+        startY: startY,
+        endX: endX,
+        endY: endY,
+      })
+
+      router.push(`/navigate?${params.toString()}`)
+    }
+  }
+
   return (
     <div className="p-7">
       <TopBar />
@@ -90,17 +165,13 @@ export default function Home() {
         onChange={handleInputChange}
         icon={<button onClick={handleGpsClick}>{gpsIcon}</button>}
       />
-      <Link
-        href={{
-          pathname: ROUTE.NAVIGATE,
-          query: {
-            from: inputs[0],
-            to: inputs[1],
-          },
-        }}
+      <Button
+        onClick={handleSearchClick}
+        className="mt-10 h-[70px] w-full text-3xl"
       >
-        <Button className="mt-10 h-[70px] w-full text-3xl">길 찾기</Button>
-      </Link>
+        {isLoading ? '로딩 중...' : '길 찾기'}
+      </Button>
+
       <div className="flex items-center justify-center">
         <span className="mb-5 mt-12 text-center text-3xl text-gray-900">
           내 주변 인기있는 장소
@@ -127,9 +198,7 @@ export default function Home() {
         </div>
       </div>
       <Link href="https://7zc54lj88vd.typeform.com/to/Pjwsa8Xz">
-        <Button className={cn(buttonVariants(), 'w-full bg-primary-400')}>
-          제안하러 가기
-        </Button>
+        <Button className={cn('w-full bg-primary-400')}>제안하러 가기</Button>
       </Link>
       <Image src={Main} alt="main" />
       <LocationPermissionButton onClick={handleLocationPermission} />
