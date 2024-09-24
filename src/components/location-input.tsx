@@ -2,7 +2,7 @@ import { Card } from '~/components/ui/card'
 import Input from '~/components/ui/input'
 import Image from 'next/image'
 import { Button } from '~/components/ui/button'
-import Gps from '~/assets/images/gps-green.png'
+import Gps from '~/assets/gps-green.svg'
 
 interface LocationInputProps {
   inputs: string[]
@@ -13,7 +13,7 @@ export default function LocationInput({
   inputs,
   onChange,
 }: LocationInputProps) {
-  const gpsIcon = <Image src={Gps} alt="gps" />
+  const gpsIcon = <Image src={Gps} alt="gps" width={40} />
 
   return (
     <>
@@ -27,7 +27,7 @@ export default function LocationInput({
           <div key={index}>
             <Input
               value={place}
-              icon={gpsIcon}
+              icon={index === 0 ? gpsIcon : undefined}
               onChange={(e) => onChange(index, e)}
             />
             {index !== inputs.length - 1 && (
@@ -36,7 +36,7 @@ export default function LocationInput({
           </div>
         ))}
       </Card>
-      <Button className="mt-10 h-24 w-full text-3xl">길 찾기</Button>
+      <Button className="mt-10 h-[70px] w-full text-3xl">길 찾기</Button>
     </>
   )
 }

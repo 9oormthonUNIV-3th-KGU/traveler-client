@@ -22,7 +22,7 @@ export default function Input({
   return (
     <div className="relative flex items-center">
       <input
-        className={`flex w-full flex-col rounded py-6 pl-7 text-3xl ${isFocused ? 'text-primary-400' : 'text-black'} bg-white`}
+        className={`flex w-full flex-col rounded py-3 pl-7 text-3xl ${isFocused ? 'text-primary-400' : 'text-black'} bg-white`}
         value={value}
         onChange={onChange}
         onFocus={handleFocus}
