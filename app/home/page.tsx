@@ -1,11 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Button } from '~/components/ui/button'
+import { buttonVariants } from '~/components/ui/button'
+import { cn } from '~/utils/cn'
+
 import Image from 'next/image'
+import Link from 'next/link'
+
 import TopBar from '~/components/top-bar'
 import LocationInput from '~/components/location-input'
 import PopularLocationRank from '~/components/popular-location-rank'
-import { Button } from '~/components/ui/button'
 import Main from '~/assets/main.svg'
 import LocationPermissionButton from '~/components/location-permission-button'
 
@@ -67,6 +72,11 @@ export default function Home() {
     <>
       <TopBar />
       <LocationInput inputs={inputs} onChange={handleInputChange} />
+      <div className="flex items-center justify-center">
+        <span className="mb-5 mt-12 text-center text-3xl text-gray-900">
+          내 주변 인기있는 장소
+        </span>
+      </div>
       <PopularLocationRank />
       {!isLocationAllowed && (
         <div className="mt-3 text-center text-2xl text-gray-700">
@@ -81,9 +91,11 @@ export default function Home() {
           서비스 개선을 위해서 제안해주세요!
         </div>
       </div>
-      <Button className="h-16 w-full bg-primary-300 text-2xl text-gray-900">
-        제안하러 가기
-      </Button>
+      <Link href="https://7zc54lj88vd.typeform.com/to/Pjwsa8Xz">
+        <Button className={cn(buttonVariants(), 'w-full bg-primary-400')}>
+          제안하러 가기
+        </Button>
+      </Link>
       <Image src={Main} alt="main" />
       <LocationPermissionButton onClick={handleLocationPermission} />
     </>
