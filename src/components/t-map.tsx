@@ -1,44 +1,39 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { useWatchLocation } from '~/hooks/use-watch-location'
-
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Tmapv3: any
-  }
-}
-
-const options: PositionOptions = {
-  enableHighAccuracy: true,
-  timeout: 1000 * 60 * 1,
-  maximumAge: 1000 * 3600 * 24,
-} as const
-
-function TMap() {
-  const { location, cancelLocationWatch } = useWatchLocation(options)
+function TMap({
+  from,
+  to,
+}: {
+  from: { title: string; x: string; y: string }
+  to: { title: string; x: string; y: string }
+}) {
+  const map = useRef()
 
   useEffect(() => {
-    if (location) {
-      const { Tmapv3 } = window
+    const { Tmapv3 } = window
 
-      const { latitude, longitude } = location
-      const map = new Tmapv3.Map('map_div', {
-        center: new Tmapv3.LatLng(latitude, longitude),
-        width: '100%',
-        height: '100dvh',
-        zoom: 18,
-      })
+    map.current = new Tmapv3.Map('map_div', {
+      center: new Tmapv3.LatLng(
+        (Number.parseFloat(from.y) + Number.parseFloat(to.y)) / 2,
+        (Number.parseFloat(from.x) + Number.parseFloat(to.x)) / 2,
+      ),
+      width: '100%',
+      height: '100dvh',
+      zoom: 17,
+    })
 
-      new Tmapv3.Marker({
-        position: new Tmapv3.LatLng(latitude, longitude),
-        map: map,
-      })
-    }
-    return cancelLocationWatch
-  }, [location, cancelLocationWatch])
+    new Tmapv3.Marker({
+      position: new Tmapv3.LatLng(from.y, from.x),
+      map: map.current,
+    })
+
+    new Tmapv3.Marker({
+      position: new Tmapv3.LatLng(to.y, to.x),
+      map: map.current,
+    })
+  }, [from, to])
 
   return <div id="map_div" className="overflow-hidden" />
 }
