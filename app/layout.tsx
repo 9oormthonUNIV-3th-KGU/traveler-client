@@ -14,6 +14,9 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: '산책',
   description: '',
+  openGraph: {
+    images: '/og.png',
+  },
 }
 
 export default function RootLayout({
@@ -23,8 +26,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script
+          src={`https://apis.openapi.sk.com/tmap/vectorjs?version=1&appKey=TTlRjX8uuV5HqbcQObDKesvd32lp4L39MAVEi4ha`}
+        />
+      </head>
       <body className={cn(pretendard.variable, 'font-sans antialiased')}>
-        <div className="mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 px-5 text-gray-950">
+        <div className="mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 text-gray-950">
           {children}
         </div>
       </body>
