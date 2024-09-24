@@ -15,7 +15,7 @@ const options: PositionOptions = {
   enableHighAccuracy: true,
   timeout: 1000 * 60 * 1,
   maximumAge: 1000 * 3600 * 24,
-}
+} as const
 
 function TMap() {
   const { location, cancelLocationWatch } = useWatchLocation(options)
