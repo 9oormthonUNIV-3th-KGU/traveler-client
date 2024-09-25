@@ -21,18 +21,9 @@ export default function LocationInput({
         </span>
       </div>
       <Card className="mt-5">
-        {inputs.map((place, index) => (
-          <div key={index}>
-            <Input
-              value={place}
-              icon={index === 0 ? icon : undefined}
-              onChange={(e) => onChange(index, e)}
-            />
-            {index !== inputs.length - 1 && (
-              <hr className="my-4 border-dashed border-gray-400" />
-            )}
-          </div>
-        ))}
+        <Input value={inputs[0]} icon={icon} onChange={(e) => onChange(0, e)} />
+        <hr className="my-4 border-dashed border-gray-400" />
+        <Input value={inputs[1]} onChange={(e) => onChange(1, e)} />
       </Card>
     </>
   )
