@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { Card } from '~/components/ui/card'
 import Input from '~/components/ui/input'
@@ -14,6 +14,16 @@ export default function LocationInput({
   onChange,
   icon,
 }: LocationInputProps) {
+  const inputRefs = useRef<string[]>(inputs)
+
+  const handleInputChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    inputRefs.current[index] = event.target.value
+    onChange(index, event)
+  }
+
   return (
     <>
       <div className="flex items-center justify-center">
@@ -22,9 +32,13 @@ export default function LocationInput({
         </span>
       </div>
       <Card className="mt-5">
-        <Input value={inputs[0]} icon={icon} onChange={(e) => onChange(0, e)} />
+        <Input
+          value={inputs[0]}
+          icon={icon}
+          onChange={(e) => handleInputChange(0, e)}
+        />
         <hr className="my-4 border-dashed border-gray-400" />
-        <Input value={inputs[1]} onChange={(e) => onChange(1, e)} />
+        <Input value={inputs[1]} onChange={(e) => handleInputChange(1, e)} />
       </Card>
     </>
   )
