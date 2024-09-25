@@ -4,7 +4,7 @@ export default {
     'type-enum': [
       2,
       'always',
-      ['chore', 'design', 'docs', 'feat', 'fix', 'refactor', 'style'],
+      ['chore', 'deploy', 'design', 'docs', 'feat', 'fix', 'refactor', 'style'],
     ],
   },
 }
