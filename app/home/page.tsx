@@ -70,7 +70,7 @@ export default function Home() {
       React.SetStateAction<{ latitude: number; longitude: number } | null>
     >,
   ) => {
-    const appKey = 'TTlRjX8uuV5HqbcQObDKesvd32lp4L39MAVEi4ha'
+    const appKey = process.env.NEXT_PUBLIC_TMAP_APP_KEY
     const url = `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?version=1&format=json&appKey=${appKey}&fullAddr=${encodeURIComponent(
       address,
     )}`
