@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import userIcon from '~/assets/images/user.png'
+import userIcon from '~/assets/user.svg'
 import Logo from '~/assets/logo.svg'
 
 export default function TopBar() {

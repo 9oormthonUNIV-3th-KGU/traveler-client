@@ -1,9 +1,9 @@
 import { Card } from './ui/card'
 import Image from 'next/image'
-import TrophyIcon from '~/assets/images/Trophy.png'
-import GoldIcon from '~/assets/images/Gold.png'
-import SilverIcon from '~/assets/images/Silver.png'
-import BronzeIcon from '~/assets/images/Bronze.png'
+import TrophyIcon from '~/assets/trophy.svg'
+import GoldIcon from '~/assets/gold.svg'
+import SilverIcon from '~/assets/silver.svg'
+import BronzeIcon from '~/assets/bronze.svg'
 
 export default function PopularLocationRank() {
   return (
