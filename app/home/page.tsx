@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -14,10 +14,11 @@ import LocationInput from '~/components/location-input'
 import PopularLocationRank from '~/components/popular-location-rank'
 import LocationPermissionButton from '~/components/location-permission-button'
 import { TMap } from '~/components/t-map'
+import { useLocationPermission } from '~/hooks/use-location-permission'
 
 export default function Home() {
-  const [isLocationAllowed, setIsLocationAllowed] = useState(false)
   const [inputs, setInputs] = useState(['출발지 입력', '도착지 입력'])
+  const [isLoading, setIsLoading] = useState(false)
   const [currentLocation, setCurrentLocation] = useState<{
     latitude: number
     longitude: number
@@ -33,41 +34,10 @@ export default function Home() {
     longitude: number
   } | null>(null)
 
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const { isLocationAllowed } = useLocationPermission()
 
   const gpsIcon = <Image src={Gps} alt="gps" width={40} />
-
-  const router = useRouter() // useRouter 훅 사용
-
-  useEffect(() => {
-    navigator.permissions
-      .query({ name: 'geolocation' })
-      .then((result) => {
-        setIsLocationAllowed(result.state === 'granted')
-
-        result.onchange = () => setIsLocationAllowed(result.state === 'granted')
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [])
-
-  const handleLocationPermission = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        () => {
-          setIsLocationAllowed(true)
-          console.log('위치 정보가 허용되었습니다.')
-        },
-        () => {
-          setIsLocationAllowed(false)
-          console.error('위치 정보 허용이 거부되었습니다.')
-        },
-      )
-    } else {
-      console.log('이 브라우저는 위치 정보를 지원하지 않습니다.')
-    }
-  }
 
   const handleGpsClick = () => {
     if (navigator.geolocation) {
@@ -199,8 +169,10 @@ export default function Home() {
       <Link href="https://7zc54lj88vd.typeform.com/to/Pjwsa8Xz">
         <Button className={cn('w-full bg-primary-400')}>제안하러 가기</Button>
       </Link>
-      <Image src={Main} alt="main" />
-      <LocationPermissionButton onClick={handleLocationPermission} />
+      <div className="flex justify-center">
+        <Image src={Main} alt="main" width={338} />
+      </div>
+      <LocationPermissionButton />
     </div>
   )
 }
