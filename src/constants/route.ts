@@ -1,7 +1,7 @@
 const ROUTE = {
   LOGIN: '/',
-  KAKAO_LOGIN: '/on-board', // TODO: 백엔드에서 OAuth 구현이 완료되면 수정할게요!
-  MAIN: '/', // TODO: 메인 페이지 경로 정해지면 수정해주세요! @지현
+  KAKAO_LOGIN: process.env.NEXT_PUBLIC_OAUTH_URL,
+  MAIN: '/navigate?from=카페워터쿨러&to=광교역[신분당선]&startX=127.03212618827865&startY=37.30078023598813&endX=127.04426765441936&endY=37.30209139534143',
   NAVIGATE: '/navigate',
   ONBOARD: '/on-board',
 } as const
