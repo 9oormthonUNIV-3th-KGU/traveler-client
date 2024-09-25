@@ -2,17 +2,16 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '~/components/ui/button'
-import { cn } from '~/utils/cn'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import Gps from '~/assets/gps-green.svg'
 
+import { Button } from '~/components/ui/button'
+import { cn } from '~/utils/cn'
+import Gps from '~/assets/gps-green.svg'
+import Main from '~/assets/main.svg'
 import TopBar from '~/components/top-bar'
 import LocationInput from '~/components/location-input'
 import PopularLocationRank from '~/components/popular-location-rank'
-import Main from '~/assets/main.svg'
 import LocationPermissionButton from '~/components/location-permission-button'
 import { TMap } from '~/components/t-map'
 

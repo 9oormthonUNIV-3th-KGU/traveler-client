@@ -1,5 +1,6 @@
-import { Card } from './ui/card'
 import Image from 'next/image'
+
+import { Card } from '~/components/ui/card'
 import TrophyIcon from '~/assets/trophy.svg'
 import GoldIcon from '~/assets/gold.svg'
 import SilverIcon from '~/assets/silver.svg'
