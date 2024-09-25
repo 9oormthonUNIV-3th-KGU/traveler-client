@@ -2,14 +2,19 @@
 
 import { useEffect, useRef } from 'react'
 
+import type { TTMap } from '~/types/t-map'
+// import type { Feature } from '~/types/feature'
+
 function TMap({
+  // features,
   from,
   to,
 }: {
+  // features: Feature[];
   from: { title: string; x: string; y: string }
   to: { title: string; x: string; y: string }
 }) {
-  const map = useRef()
+  const map = useRef<TTMap>()
 
   useEffect(() => {
     const { Tmapv3 } = window
@@ -21,18 +26,26 @@ function TMap({
       ),
       width: '100%',
       height: '100dvh',
-      zoom: 17,
     })
 
+    const fromLatLng = new Tmapv3.LatLng(from.y, from.x)
+    const toLatLng = new Tmapv3.LatLng(to.y, to.x)
+
     new Tmapv3.Marker({
-      position: new Tmapv3.LatLng(from.y, from.x),
+      position: fromLatLng,
       map: map.current,
     })
 
     new Tmapv3.Marker({
-      position: new Tmapv3.LatLng(to.y, to.x),
+      position: toLatLng,
       map: map.current,
     })
+
+    const PTbounds = new Tmapv3.LatLngBounds()
+    PTbounds.extend(fromLatLng)
+    PTbounds.extend(toLatLng)
+
+    map.current?.fitBounds(PTbounds)
   }, [from, to])
 
   return <div id="map_div" className="overflow-hidden" />

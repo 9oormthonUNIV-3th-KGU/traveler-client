@@ -74,7 +74,11 @@ export default function Navigate({
           time={features[0].properties.totalTime}
           distance={features[0].properties.totalDistance}
         />
-        <TMap from={start} to={end} />
+        <TMap
+          // features={features}
+          from={start}
+          to={end}
+        />
         <NavigateSlider features={features} />
       </div>
     )
