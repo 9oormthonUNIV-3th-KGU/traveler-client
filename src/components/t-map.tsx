@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { cn } from '~/utils/cn'
-import { cva } from 'cva'
+
 import { useWatchLocation } from '~/hooks/use-watch-location'
 
 declare global {
@@ -12,63 +11,24 @@ declare global {
   }
 }
 
-const mapVariants = cva({
-  variants: {
-    size: {
-      default: 'h-[100vh] w-full',
-      small: 'h-[60vh] w-full',
-      smaller: 'h-[30vh] w-full',
-    },
-    border: {
-      none: '',
-      rounded: 'rounded-xl',
-    },
-    shadow: {
-      none: '',
-      shadow: 'shadow',
-    },
-  },
-  defaultVariants: {
-    size: 'default',
-    border: 'none',
-    shadow: 'none',
-  },
-})
-
 const options: PositionOptions = {
   enableHighAccuracy: true,
   timeout: 1000 * 60 * 1,
   maximumAge: 1000 * 3600 * 24,
-} as const
-
-interface TMapProps {
-  currentLocation?: { latitude: number; longitude: number } | null
-  size?: 'default' | 'small' | 'smaller'
-  border?: 'none' | 'rounded'
-  shadow?: 'none' | 'shadow'
 }
 
-function TMap({
-  currentLocation,
-  size = 'default',
-  border = 'none',
-  shadow = 'none',
-}: TMapProps) {
+function TMap() {
   const { location, cancelLocationWatch } = useWatchLocation(options)
 
   useEffect(() => {
-    const effectiveLocation = currentLocation || location
-
-    if (
-      effectiveLocation &&
-      effectiveLocation.latitude != null &&
-      effectiveLocation.longitude != null
-    ) {
+    if (location) {
       const { Tmapv3 } = window
 
-      const { latitude, longitude } = effectiveLocation
+      const { latitude, longitude } = location
       const map = new Tmapv3.Map('map_div', {
         center: new Tmapv3.LatLng(latitude, longitude),
+        width: '100%',
+        height: '100dvh',
         zoom: 18,
       })
 
@@ -78,14 +38,9 @@ function TMap({
       })
     }
     return cancelLocationWatch
-  }, [location, currentLocation, cancelLocationWatch])
+  }, [location, cancelLocationWatch])
 
-  return (
-    <div
-      id="map_div"
-      className={cn('overflow-hidden', mapVariants({ size, border, shadow }))}
-    />
-  )
+  return <div id="map_div" className="overflow-hidden" />
 }
 
 export { TMap }

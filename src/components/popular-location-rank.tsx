@@ -8,7 +8,7 @@ import BronzeIcon from '~/assets/bronze.svg'
 
 export default function PopularLocationRank() {
   return (
-    <Card className="mx-4 w-[95%]">
+    <Card className="z-10 mx-4">
       <ul>
         <li className="m-5 mb-12 flex flex-row justify-between">
           <Image src={GoldIcon} alt="gold" width={50} />

@@ -19,10 +19,6 @@ import { useLocationPermission } from '~/hooks/use-location-permission'
 export default function Home() {
   const [inputs, setInputs] = useState(['출발지 입력', '도착지 입력'])
   const [isLoading, setIsLoading] = useState(false)
-  const [currentLocation, setCurrentLocation] = useState<{
-    latitude: number
-    longitude: number
-  } | null>(null)
 
   const [startLocation, setStartLocation] = useState<{
     latitude: number
@@ -39,12 +35,46 @@ export default function Home() {
 
   const gpsIcon = <Image src={Gps} alt="gps" width={40} />
 
+  const handleInputChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newInputs = [...inputs]
+    newInputs[index] = event.target.value
+    setInputs(newInputs)
+  }
+
   const handleGpsClick = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async (position) => {
           const { latitude, longitude } = position.coords
-          setCurrentLocation({ latitude, longitude })
+
+          const appKey = process.env.NEXT_PUBLIC_TMAP_APP_KEY
+          const reverseGeocodeUrl = `https://apis.openapi.sk.com/tmap/geo/reversegeocoding?version=1&lat=${latitude}&lon=${longitude}&coordType=WGS84GEO&addressType=A10&appKey=${appKey}`
+
+          try {
+            const response = await fetch(reverseGeocodeUrl)
+            const data = await response.json()
+
+            if (data.addressInfo) {
+              const fullAddress = data.addressInfo.fullAddress
+
+              const addressParts = fullAddress.split(',')
+              const secondAddress =
+                addressParts.length > 1 ? addressParts[1] : fullAddress
+
+              if (secondAddress) {
+                const newInputs = [...inputs]
+                newInputs[0] = secondAddress.trim()
+                setInputs(newInputs)
+              } else {
+                console.error('주소를 찾을 수 없습니다.')
+              }
+            }
+          } catch (error) {
+            console.error('요청 실패', error)
+          }
         },
         (error) => {
           console.error('현재 위치를 가져오지 못했습니다.', error)
@@ -53,15 +83,6 @@ export default function Home() {
     } else {
       console.log('이 브라우저는 위치 정보를 지원하지 않습니다.')
     }
-  }
-
-  const handleInputChange = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newInputs = [...inputs]
-    newInputs[index] = event.target.value
-    setInputs(newInputs)
   }
 
   const handleGeocoding = async (
@@ -139,7 +160,7 @@ export default function Home() {
         <div className="w-full px-5 py-4">
           <Button
             onClick={handleSearchClick}
-            className="h-16 w-full text-extra font-semibold !text-white"
+            className="h-20 w-full text-extra font-semibold !text-white"
           >
             {isLoading ? '로딩 중...' : '길 찾기'}
           </Button>
@@ -152,14 +173,13 @@ export default function Home() {
         </div>
       </div>
 
-      <TMap
-        currentLocation={currentLocation}
-        size="small"
-        border="rounded"
-        shadow="shadow"
-      />
+      <div className="flex w-full flex-col">
+        <div className="relative mx-4 h-[65dvh] overflow-hidden rounded shadow">
+          <TMap />
+        </div>
+        <PopularLocationRank />
+      </div>
 
-      <PopularLocationRank />
       {!isLocationAllowed && (
         <div className="mt-3 text-center text-small font-medium text-gray-700">
           먼저 오른쪽 하단 버튼을 눌러 위치정보를 허용해주세요!
@@ -170,7 +190,7 @@ export default function Home() {
         <div className="mb-2 mt-10 text-center text-large font-semibold text-gray-900">
           서비스가 마음에 드셨나요?
         </div>
-        <div className="mb-6 text-center text-small font-medium text-gray-700">
+        <div className="mb-8 text-center text-small font-medium text-gray-700">
           서비스 개선을 위해서 제안해주세요!
         </div>
       </div>
@@ -178,14 +198,14 @@ export default function Home() {
       <Link href="https://7zc54lj88vd.typeform.com/to/Pjwsa8Xz">
         <Button
           className={cn(
-            'm-4 h-[65px] w-[95%] bg-primary-400 text-base font-semibold',
+            'mx-4 h-[60px] w-[95%] bg-primary-200 text-base font-semibold text-primary-500',
           )}
         >
           제안하러 가기
         </Button>
       </Link>
       <div className="flex justify-center">
-        <Image src={Main} alt="main" width={500} />
+        <Image src={Main} alt="main" width={550} />
       </div>
       <LocationPermissionButton />
     </div>

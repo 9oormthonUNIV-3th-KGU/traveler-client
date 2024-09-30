@@ -29,7 +29,7 @@ export default function Input({
         onBlur={handleBlur}
       />
       {icon && (
-        <span className="absolute right-3 mr-3 mt-2 w-[32px]">{icon}</span>
+        <span className="absolute right-3 mr-3 mt-1 w-[32px]">{icon}</span>
       )}
     </div>
   )
