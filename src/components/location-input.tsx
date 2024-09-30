@@ -27,11 +27,11 @@ export default function LocationInput({
   return (
     <>
       <div className="flex items-center justify-center">
-        <span className="text-center text-3xl text-gray-600">
+        <span className="text-center text-large font-semibold text-gray-400">
           어디를 산책할까요?
         </span>
       </div>
-      <Card className="mt-5">
+      <Card className="m-5">
         <Input
           value={inputs[0]}
           icon={icon}

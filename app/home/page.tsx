@@ -134,43 +134,58 @@ export default function Home() {
         onChange={handleInputChange}
         icon={<button onClick={handleGpsClick}>{gpsIcon}</button>}
       />
-      <Button
-        onClick={handleSearchClick}
-        className="mt-10 h-[70px] w-full text-3xl"
-      >
-        {isLoading ? '로딩 중...' : '길 찾기'}
-      </Button>
 
-      <div className="flex items-center justify-center">
-        <span className="mb-5 mt-12 text-center text-3xl text-gray-900">
-          내 주변 인기있는 장소
-        </span>
+      <div className="flex flex-col items-center justify-center">
+        <div className="w-full px-5 py-4">
+          <Button
+            onClick={handleSearchClick}
+            className="h-16 w-full text-extra font-semibold !text-white"
+          >
+            {isLoading ? '로딩 중...' : '길 찾기'}
+          </Button>
+        </div>
+
+        <div className="mb-5 mt-12">
+          <span className="text-center text-large font-semibold text-gray-900">
+            내 주변 인기있는 장소
+          </span>
+        </div>
       </div>
+
       <TMap
         currentLocation={currentLocation}
         size="small"
         border="rounded"
         shadow="shadow"
       />
+
       <PopularLocationRank />
       {!isLocationAllowed && (
-        <div className="mt-3 text-center text-2xl text-gray-700">
+        <div className="mt-3 text-center text-small font-medium text-gray-700">
           먼저 오른쪽 하단 버튼을 눌러 위치정보를 허용해주세요!
         </div>
       )}
+
       <div className="flex flex-col items-center justify-center">
-        <div className="mb-2 mt-10 text-center text-3xl text-gray-900">
+        <div className="mb-2 mt-10 text-center text-large font-semibold text-gray-900">
           서비스가 마음에 드셨나요?
         </div>
-        <div className="mb-8 text-center text-xl text-gray-700">
+        <div className="mb-6 text-center text-small font-medium text-gray-700">
           서비스 개선을 위해서 제안해주세요!
         </div>
       </div>
+
       <Link href="https://7zc54lj88vd.typeform.com/to/Pjwsa8Xz">
-        <Button className={cn('w-full bg-primary-400')}>제안하러 가기</Button>
+        <Button
+          className={cn(
+            'm-4 h-[65px] w-[95%] bg-primary-400 text-base font-semibold',
+          )}
+        >
+          제안하러 가기
+        </Button>
       </Link>
       <div className="flex justify-center">
-        <Image src={Main} alt="main" width={338} />
+        <Image src={Main} alt="main" width={500} />
       </div>
       <LocationPermissionButton />
     </div>
