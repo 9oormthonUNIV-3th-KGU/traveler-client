@@ -11,8 +11,8 @@ function NavigateHeader({
   time,
   distance,
 }: {
-  from: string
-  to: string
+  from: { title: string; x: string; y: string }
+  to: { title: string; x: string; y: string }
   time: number
   distance: number
 }) {
@@ -26,28 +26,34 @@ function NavigateHeader({
             </Link>
           </div>
           <div className="flex flex-1 justify-end gap-2">
-            <span className="font-bold text-gray-600">{time}분</span>
+            <span className="font-bold text-gray-600">
+              {Math.round(time / 60)}분
+            </span>
             <span className="text-gray-600">|</span>
             <span className="font-bold text-gray-600">{distance}m</span>
           </div>
         </div>
         <div className="flex items-center">
           <div className="basis-1/2">
-            <span className="line-clamp-1 font-bold">{from}</span>
+            <span className="line-clamp-1 font-bold">{from.title}</span>
           </div>
           <Link
             href={{
               pathname: ROUTE.NAVIGATE,
               query: {
-                from: to,
-                to: from,
+                from: to.title,
+                to: from.title,
+                startX: to.x,
+                startY: to.y,
+                endX: from.x,
+                endY: from.y,
               },
             }}
           >
             <Image src={Switch} alt="" width={28} />
           </Link>
           <div className="basis-1/2 text-end">
-            <span className="line-clamp-1 font-bold">{to}</span>
+            <span className="line-clamp-1 font-bold">{to.title}</span>
           </div>
         </div>
       </div>
