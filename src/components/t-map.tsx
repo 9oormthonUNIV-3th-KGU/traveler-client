@@ -1,44 +1,52 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { useWatchLocation } from '~/hooks/use-watch-location'
+import type { TTMap } from '~/types/t-map'
+// import type { Feature } from '~/types/feature'
 
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Tmapv3: any
-  }
-}
-
-const options: PositionOptions = {
-  enableHighAccuracy: true,
-  timeout: 1000 * 60 * 1,
-  maximumAge: 1000 * 3600 * 24,
-}
-
-function TMap() {
-  const { location, cancelLocationWatch } = useWatchLocation(options)
+function TMap({
+  // features,
+  from,
+  to,
+}: {
+  // features: Feature[];
+  from: { title: string; x: string; y: string }
+  to: { title: string; x: string; y: string }
+}) {
+  const map = useRef<TTMap>()
 
   useEffect(() => {
-    if (location) {
-      const { Tmapv3 } = window
+    const { Tmapv3 } = window
 
-      const { latitude, longitude } = location
-      const map = new Tmapv3.Map('map_div', {
-        center: new Tmapv3.LatLng(latitude, longitude),
-        width: '100%',
-        height: '100dvh',
-        zoom: 18,
-      })
+    map.current = new Tmapv3.Map('map_div', {
+      center: new Tmapv3.LatLng(
+        (Number.parseFloat(from.y) + Number.parseFloat(to.y)) / 2,
+        (Number.parseFloat(from.x) + Number.parseFloat(to.x)) / 2,
+      ),
+      width: '100%',
+      height: '100dvh',
+    })
 
-      new Tmapv3.Marker({
-        position: new Tmapv3.LatLng(latitude, longitude),
-        map: map,
-      })
-    }
-    return cancelLocationWatch
-  }, [location, cancelLocationWatch])
+    const fromLatLng = new Tmapv3.LatLng(from.y, from.x)
+    const toLatLng = new Tmapv3.LatLng(to.y, to.x)
+
+    new Tmapv3.Marker({
+      position: fromLatLng,
+      map: map.current,
+    })
+
+    new Tmapv3.Marker({
+      position: toLatLng,
+      map: map.current,
+    })
+
+    const PTbounds = new Tmapv3.LatLngBounds()
+    PTbounds.extend(fromLatLng)
+    PTbounds.extend(toLatLng)
+
+    map.current?.fitBounds(PTbounds)
+  }, [from, to])
 
   return <div id="map_div" className="overflow-hidden" />
 }

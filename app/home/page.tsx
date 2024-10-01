@@ -175,7 +175,21 @@ export default function Home() {
 
       <div className="flex w-full flex-col">
         <div className="relative mx-4 h-[65dvh] overflow-hidden rounded shadow">
-          <TMap />
+          {startLocation && endLocation && (
+            <TMap
+              from={{
+                title: inputs[0],
+                x: startLocation.longitude.toString(),
+                y: startLocation.latitude.toString(),
+              }}
+              to={{
+                title: inputs[1],
+                x: endLocation.longitude.toString(),
+                y: endLocation.latitude.toString(),
+              }}
+            />
+          )}
+
         </div>
         <PopularLocationRank />
       </div>

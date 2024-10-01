@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    Tmapv3: unknown
+    Tmapv3: any
   }
 }
 
