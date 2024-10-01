@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -29,6 +29,30 @@ export default function Home() {
     latitude: number
     longitude: number
   } | null>(null)
+  const [currentLocation, setCurrentLocation] = useState<{
+    latitude: number
+    longitude: number
+  } | null>(null)
+
+  useEffect(() => {
+    // 현재 위치 가져오기
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords
+          setCurrentLocation({
+            latitude,
+            longitude,
+          })
+        },
+        (error) => {
+          console.error('현재 위치를 가져오지 못했습니다.', error)
+        },
+      )
+    } else {
+      console.log('이 브라우저는 위치 정보를 지원하지 않습니다.')
+    }
+  }, [])
 
   const router = useRouter()
   const { isLocationAllowed } = useLocationPermission()
@@ -175,21 +199,28 @@ export default function Home() {
 
       <div className="flex w-full flex-col">
         <div className="relative mx-4 h-[65dvh] overflow-hidden rounded shadow">
-          {startLocation && endLocation && (
+          {currentLocation && (
             <TMap
               from={{
                 title: inputs[0],
-                x: startLocation.longitude.toString(),
-                y: startLocation.latitude.toString(),
+                x: startLocation
+                  ? startLocation.longitude.toString()
+                  : currentLocation?.longitude.toString(),
+                y: startLocation
+                  ? startLocation.latitude.toString()
+                  : currentLocation?.latitude.toString(),
               }}
               to={{
                 title: inputs[1],
-                x: endLocation.longitude.toString(),
-                y: endLocation.latitude.toString(),
+                x: endLocation
+                  ? endLocation.longitude.toString()
+                  : currentLocation?.longitude.toString(),
+                y: endLocation
+                  ? endLocation.latitude.toString()
+                  : currentLocation?.latitude.toString(),
               }}
             />
           )}
-
         </div>
         <PopularLocationRank />
       </div>
