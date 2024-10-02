@@ -1,6 +1,6 @@
 const ROUTE = {
   LOGIN: '/',
-  KAKAO_LOGIN: '/on-board', // TODO: 백엔드에서 OAuth 구현이 완료되면 수정할게요!
+  KAKAO_LOGIN: process.env.NEXT_PUBLIC_OAUTH_URL,
   MAIN: '/home',
   NAVIGATE: '/navigate',
   ONBOARD: '/on-board',
