@@ -29,7 +29,7 @@ export default function RootLayout({
       <head>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script
-          src={`https://apis.openapi.sk.com/tmap/vectorjs?version=1&appKey=TTlRjX8uuV5HqbcQObDKesvd32lp4L39MAVEi4ha`}
+          src={`https://apis.openapi.sk.com/tmap/vectorjs?version=1&appKey=${process.env.NEXT_PUBLIC_TMAP_APP_KEY}`}
         />
       </head>
       <body className={cn(pretendard.variable, 'font-sans antialiased')}>

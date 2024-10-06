@@ -1,13 +1,14 @@
-import { Card } from './ui/card'
 import Image from 'next/image'
-import TrophyIcon from '~/assets/images/Trophy.png'
-import GoldIcon from '~/assets/images/Gold.png'
-import SilverIcon from '~/assets/images/Silver.png'
-import BronzeIcon from '~/assets/images/Bronze.png'
+
+import { Card } from '~/components/ui/card'
+import TrophyIcon from '~/assets/trophy.svg'
+import GoldIcon from '~/assets/gold.svg'
+import SilverIcon from '~/assets/silver.svg'
+import BronzeIcon from '~/assets/bronze.svg'
 
 export default function PopularLocationRank() {
   return (
-    <Card>
+    <Card className="z-10 mx-4">
       <ul>
         <li className="m-5 mb-12 flex flex-row justify-between">
           <Image src={GoldIcon} alt="gold" width={50} />

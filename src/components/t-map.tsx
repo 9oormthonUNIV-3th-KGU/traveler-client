@@ -1,91 +1,54 @@
 'use client'
 
-import { useEffect } from 'react'
-import { cn } from '~/utils/cn'
-import { cva } from 'cva'
-import { useWatchLocation } from '~/hooks/use-watch-location'
+import { useEffect, useRef } from 'react'
 
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Tmapv3: any
-  }
-}
-
-const mapVariants = cva({
-  variants: {
-    size: {
-      default: 'h-[100vh] w-full',
-      small: 'h-[60vh] w-full',
-      smaller: 'h-[30vh] w-full',
-    },
-    border: {
-      none: '',
-      rounded: 'rounded-xl',
-    },
-    shadow: {
-      none: '',
-      shadow: 'shadow',
-    },
-  },
-  defaultVariants: {
-    size: 'default',
-    border: 'none',
-    shadow: 'none',
-  },
-})
-
-const options: PositionOptions = {
-  enableHighAccuracy: true,
-  timeout: 1000 * 60 * 1,
-  maximumAge: 1000 * 3600 * 24,
-} as const
-
-interface TMapProps {
-  currentLocation?: { latitude: number; longitude: number } | null
-  size?: 'default' | 'small' | 'smaller'
-  border?: 'none' | 'rounded'
-  shadow?: 'none' | 'shadow'
-}
+import type { TTMap } from '~/types/t-map'
+// import type { Feature } from '~/types/feature'
 
 function TMap({
-  currentLocation,
-  size = 'default',
-  border = 'none',
-  shadow = 'none',
-}: TMapProps) {
-  const { location, cancelLocationWatch } = useWatchLocation(options)
+  // features,
+  from,
+  to,
+}: {
+  // features: Feature[];
+  from: { title: string; x: string; y: string }
+  to: { title: string; x: string; y: string }
+}) {
+  const map = useRef<TTMap>()
 
   useEffect(() => {
-    const effectiveLocation = currentLocation || location
+    const { Tmapv3 } = window
 
-    if (
-      effectiveLocation &&
-      effectiveLocation.latitude != null &&
-      effectiveLocation.longitude != null
-    ) {
-      const { Tmapv3 } = window
+    map.current = new Tmapv3.Map('map_div', {
+      center: new Tmapv3.LatLng(
+        (Number.parseFloat(from.y) + Number.parseFloat(to.y)) / 2,
+        (Number.parseFloat(from.x) + Number.parseFloat(to.x)) / 2,
+      ),
+      width: '100%',
+      height: '100dvh',
+    })
 
-      const { latitude, longitude } = effectiveLocation
-      const map = new Tmapv3.Map('map_div', {
-        center: new Tmapv3.LatLng(latitude, longitude),
-        zoom: 18,
-      })
+    const fromLatLng = new Tmapv3.LatLng(from.y, from.x)
+    const toLatLng = new Tmapv3.LatLng(to.y, to.x)
 
-      new Tmapv3.Marker({
-        position: new Tmapv3.LatLng(latitude, longitude),
-        map: map,
-      })
-    }
-    return cancelLocationWatch
-  }, [location, currentLocation, cancelLocationWatch])
+    new Tmapv3.Marker({
+      position: fromLatLng,
+      map: map.current,
+    })
 
-  return (
-    <div
-      id="map_div"
-      className={cn('overflow-hidden', mapVariants({ size, border, shadow }))}
-    />
-  )
+    new Tmapv3.Marker({
+      position: toLatLng,
+      map: map.current,
+    })
+
+    const PTbounds = new Tmapv3.LatLngBounds()
+    PTbounds.extend(fromLatLng)
+    PTbounds.extend(toLatLng)
+
+    map.current?.fitBounds(PTbounds)
+  }, [from, to])
+
+  return <div id="map_div" className="overflow-hidden" />
 }
 
 export { TMap }

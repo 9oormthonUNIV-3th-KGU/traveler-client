@@ -26,7 +26,7 @@ export default function Input({
   return (
     <div className="relative flex items-center">
       <input
-        className={`flex w-full flex-col rounded py-3 pl-7 text-3xl outline-none ${isFocused ? 'text-primary-400' : 'text-black'} bg-white placeholder-black`}
+        className={`w-full flex-col rounded py-3 pl-7 text-extra font-bold outline-none ${isFocused ? 'text-primary-500' : 'text-black'} bg-white`}
         value={value}
         onChange={onChange}
         onClick={onClick}
@@ -34,7 +34,9 @@ export default function Input({
         onBlur={handleBlur}
         placeholder={index === 0 ? '출발지 입력' : '도착지 입력'}
       />
-      {icon && <span className="absolute right-3 mr-3 mt-2">{icon}</span>}
+      {icon && (
+        <span className="absolute right-3 mr-3 mt-1 w-[32px]">{icon}</span>
+      )}
     </div>
   )
 }
