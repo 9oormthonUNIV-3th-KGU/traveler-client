@@ -1,7 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { Card } from '~/components/ui/card'
 import Input from '~/components/ui/input'
+import SearchContainer from '~/components/search-container'
 
 interface LocationInputProps {
   inputs: string[]
@@ -17,6 +18,8 @@ export default function LocationInput({
   onSendData,
 }: LocationInputProps) {
   const inputRefs = useRef<string[]>(inputs)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [selectedInput, setSelectedInput] = useState<number | null>(null)
 
   const handleInputChange = (
     index: number,
@@ -24,6 +27,19 @@ export default function LocationInput({
   ) => {
     inputRefs.current[index] = event.target.value
     onChange(index, event)
+  }
+
+  const handleInputClick = (index: number) => {
+    setSelectedInput(index)
+    setIsSearchOpen(true)
+  }
+
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false)
+  }
+
+  const handleData = (data: string, index: number) => {
+    onSendData(data, index)
   }
 
   return (
@@ -38,9 +54,22 @@ export default function LocationInput({
           value={inputs[0]}
           icon={icon}
           onChange={(e) => handleInputChange(0, e)}
+          onClick={() => handleInputClick(0)}
+          index={0}
         />
         <hr className="my-4 border-dashed border-gray-400" />
-        <Input value={inputs[1]} onChange={(e) => handleInputChange(1, e)} />
+        <Input
+          value={inputs[1]}
+          onChange={(e) => handleInputChange(1, e)}
+          onClick={() => handleInputClick(1)}
+          index={1}
+        />
+        <SearchContainer
+          isOpen={isSearchOpen}
+          onClose={handleCloseSearch}
+          selectedInput={selectedInput}
+          onSendData={(data, index) => handleData(data, index)}
+        />
       </Card>
     </>
   )

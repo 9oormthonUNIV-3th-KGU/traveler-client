@@ -41,7 +41,7 @@ export default function SearchContainer({
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder={selectedInput === 0 ? '출발지 입력' : '도착지 입력'}
-          className="h-28 w-full rounded-3xl border-gray-300 p-10 text-3xl shadow outline-none"
+          className="h-28 w-full rounded-3xl border-gray-300 p-10 text-extra shadow outline-none"
         />
         <button onClick={handleClick} className="absolute right-10 mt-10">
           {searchIcon}
