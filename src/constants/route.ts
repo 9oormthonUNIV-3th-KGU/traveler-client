@@ -4,6 +4,7 @@ const ROUTE = {
   MAIN: '/',
   NAVIGATE: '/navigate',
   ONBOARD: '/on-board',
+  MYPAGE: '/my-page',
 } as const
 
 export { ROUTE }
