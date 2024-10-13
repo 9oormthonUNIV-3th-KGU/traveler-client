@@ -6,14 +6,14 @@ import { cn } from '~/utils/cn'
 function NavigateCard({
   index,
   type,
-  distance,
   description,
 }: {
   index: number
   type: keyof typeof NavigateType
-  distance?: number
   description: string
 }) {
+  const distance = description.match(/(\d+)m/g)
+
   return (
     <div className="relative flex w-[166px] shrink-0 flex-col overflow-hidden rounded bg-primary-500 shadow">
       <div className="absolute left-0.5 top-0.5 z-50 flex size-9 items-center justify-center rounded-full bg-gray-900">
@@ -38,7 +38,7 @@ function NavigateCard({
                   : 'text-primary-500',
               )}
             >
-              {distance}m
+              {distance[0].replace('m', '')}m
             </span>
           </div>
         )}
