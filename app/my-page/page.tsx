@@ -1,6 +1,9 @@
+import Link from 'next/link'
+
 import { SiteHeader } from '~/components/site-header'
-import { Button } from '~/components/ui/button'
+import { Button, buttonVariants } from '~/components/ui/button'
 import { RecentPlace } from '~/components/recent-place'
+import { ROUTE } from '~/constants/route'
 
 export default function MyPage() {
   const userName = '고다윤'
@@ -33,9 +36,12 @@ export default function MyPage() {
           <Button variant="secondary" size="sm">
             로그아웃
           </Button>
-          <Button variant="destructive" size="sm">
+          <Link
+            href={ROUTE.QUIT}
+            className={buttonVariants({ variant: 'destructive', size: 'sm' })}
+          >
             회원탈퇴
-          </Button>
+          </Link>
         </div>
       </div>
     </div>
