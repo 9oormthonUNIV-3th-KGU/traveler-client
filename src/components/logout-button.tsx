@@ -1,3 +1,7 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,8 +13,15 @@ import {
   AlertDialogTrigger,
 } from '~/components/ui/alert-dialog'
 import { Button } from '~/components/ui/button'
+import { ROUTE } from '~/constants/route'
 
 function LogoutButton() {
+  const router = useRouter()
+
+  const handleLogout = () => {
+    router.push(ROUTE.MAIN)
+  }
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -24,7 +35,7 @@ function LogoutButton() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>아니요</AlertDialogCancel>
-          <AlertDialogAction>네</AlertDialogAction>
+          <AlertDialogAction onClick={handleLogout}>네</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
