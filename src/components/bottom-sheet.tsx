@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Search from '~/assets/search.svg'
 import Image from 'next/image'
 import axios from 'axios'
@@ -24,7 +24,28 @@ export default function BottomSheet({
 }: SearchContainerProps) {
   const [inputValue, setInputValue] = useState('')
   const [suggestions, setSuggestions] = useState<string[]>([])
+  const bottomSheetRef = useRef<HTMLDivElement>(null)
+
   const searchIcon = <Image src={Search} alt="search" />
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        bottomSheetRef.current &&
+        !bottomSheetRef.current.contains(event.target as Node)
+      ) {
+        onClose()
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen, onClose])
 
   useEffect(() => {
     if (inputValue.length > 0) {
@@ -59,7 +80,8 @@ export default function BottomSheet({
     }
   }, [inputValue])
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
     if (selectedInput !== null) {
       onSendData(inputValue, selectedInput)
       onClose()
@@ -77,6 +99,7 @@ export default function BottomSheet({
 
   return (
     <div
+      ref={bottomSheetRef}
       className={`fixed z-20 h-[800px] w-[640px] translate-x-[-50%] rounded-2xl bg-gray-50 p-10 shadow transition-transform duration-500 ease-in-out ${isOpen ? 'visible translate-y-0 opacity-100' : 'invisible translate-y-full opacity-0'}`}
       style={{ left: '50%', bottom: 0 }}
     >
