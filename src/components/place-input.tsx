@@ -4,11 +4,12 @@ import { Card } from '~/components/ui/card'
 import Input from '~/components/ui/input'
 import BottomSheet from '~/components/bottom-sheet'
 
-interface LocationInputProps {
+interface PlaceInputProps {
   inputs: string[]
   onChange: (index: number, event: React.ChangeEvent<HTMLInputElement>) => void
   icon: React.ReactNode
   onSendData: (data: string, index: number) => void
+  isBottomSheetOpen: boolean
 }
 
 export default function PlaceInput({
@@ -16,7 +17,8 @@ export default function PlaceInput({
   onChange,
   icon,
   onSendData,
-}: LocationInputProps) {
+  isBottomSheetOpen
+}: PlaceInputProps) {
   const inputRefs = useRef<string[]>(inputs)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [selectedInput, setSelectedInput] = useState<number | null>(null)
@@ -30,8 +32,14 @@ export default function PlaceInput({
   }
 
   const handleInputClick = (index: number) => {
+    if (!isBottomSheetOpen) return;
+
     setSelectedInput(index)
     setIsSearchOpen(true)
+  }
+
+  const handleIconClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
   }
 
   const handleCloseSearch = () => {
@@ -50,20 +58,22 @@ export default function PlaceInput({
         </span>
       </div>
       <Card className="m-5 w-full">
-        <Input
-          value={inputs[0]}
-          icon={icon}
-          onChange={(e) => handleInputChange(0, e)}
-          onClick={() => handleInputClick(0)}
-          index={0}
-        />
+          <div onClick={() => handleInputClick(0)}>
+            <Input
+              value={inputs[0]}
+              icon={<span onClick={handleIconClick}>{icon}</span>}
+              onClick={() => handleInputClick(0)}
+              isDisabled={true}
+            />
+          </div>
         <hr className="my-4 border-dashed border-gray-400" />
-        <Input
-          value={inputs[1]}
-          onChange={(e) => handleInputChange(1, e)}
-          onClick={() => handleInputClick(1)}
-          index={1}
-        />
+          <div onClick={() => handleInputClick(1)}>
+            <Input
+              value={inputs[1]}
+              onClick={() => handleInputClick(1)}
+              isDisabled={true} 
+            />
+          </div>
         <BottomSheet
           isOpen={isSearchOpen}
           onClose={handleCloseSearch}

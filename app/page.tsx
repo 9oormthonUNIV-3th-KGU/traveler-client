@@ -21,6 +21,7 @@ export default function Home() {
   const { isLocationAllowed } = useLocationPermission()
   const [inputs, setInputs] = useState(['출발지 입력', '도착지 입력'])
   const [isLoading, setIsLoading] = useState(false)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(true)
 
   const [startLocation, setStartLocation] = useState<{
     latitude: number
@@ -110,6 +111,7 @@ export default function Home() {
 
   const handleSearchClick = async () => {
     setIsLoading(true)
+    setIsBottomSheetOpen(false)
 
     if (inputs[0]) {
       await handleGeocoding(inputs[0], setStartLocation)
@@ -183,6 +185,7 @@ export default function Home() {
           onChange={handleInputChange}
           icon={<button onClick={handleGpsClick}>{gpsIcon}</button>}
           onSendData={handleData}
+          isBottomSheetOpen={isBottomSheetOpen}
         />
 
         <div className="flex flex-col items-center justify-center">
