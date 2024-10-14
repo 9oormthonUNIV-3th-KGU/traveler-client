@@ -36,9 +36,13 @@ export default function SearchContainer({
               appKey: process.env.NEXT_PUBLIC_TMAP_APP_KEY,
             },
           });
-          console.log(response);
-          const results = response.data.searchPoiInfo.pois.poi;
-          setSuggestions(results.map((poi: any) => poi.name));
+          if (response.data?.searchPoiInfo?.pois?.poi) {
+            const results = response.data.searchPoiInfo.pois.poi;
+            setSuggestions(results.map((poi: any) => poi.name));
+        } else {
+            console.error('No POI data available');
+        }
+        
         } catch (error) {
           console.error('Error fetching suggestions:', error);
         }
@@ -83,7 +87,7 @@ export default function SearchContainer({
         </button>
         
         {suggestions.length > 0 && (
-          <ul className="absolute z-20 mt-4 w-full text-medium max-h-[620px] overflow-y-auto">
+          <ul className="absolute mt-4 w-full text-medium max-h-[620px] overflow-y-auto">
             {suggestions.map((suggestion, index) => (
               <li
                 key={index}
