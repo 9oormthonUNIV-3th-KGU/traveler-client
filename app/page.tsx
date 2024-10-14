@@ -108,12 +108,6 @@ export default function Home() {
     }
   }
 
-  // const handleData = (data: string, index: number) => {
-  //   const newInputs = [...inputs]
-  //   newInputs[index] = data
-  //   setInputs(newInputs)
-  // }
-
   const handleSearchClick = async () => {
     setIsLoading(true)
 
@@ -174,6 +168,12 @@ export default function Home() {
     }
   }
 
+  const handleData = (data: string, index: number) => {
+    const newInputs = [...inputs]
+    newInputs[index] = data
+    setInputs(newInputs)
+  }
+
   return (
     <div className="flex min-h-dvh flex-col justify-center px-5">
       <SiteHeader />
@@ -182,6 +182,7 @@ export default function Home() {
           inputs={inputs}
           onChange={handleInputChange}
           icon={<button onClick={handleGpsClick}>{gpsIcon}</button>}
+          onSendData={handleData}
         />
 
         <div className="flex flex-col items-center justify-center">

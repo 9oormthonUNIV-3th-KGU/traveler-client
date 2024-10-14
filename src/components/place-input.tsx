@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 
 import { Card } from '~/components/ui/card'
 import Input from '~/components/ui/input'
-import SearchContainer from '~/components/search-container'
+import BottomSheet from '~/components/bottom-sheet'
 
 interface LocationInputProps {
   inputs: string[]
@@ -64,7 +64,7 @@ export default function PlaceInput({
           onClick={() => handleInputClick(1)}
           index={1}
         />
-        <SearchContainer
+        <BottomSheet
           isOpen={isSearchOpen}
           onClose={handleCloseSearch}
           selectedInput={selectedInput}
