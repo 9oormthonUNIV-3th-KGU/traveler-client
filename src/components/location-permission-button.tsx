@@ -7,10 +7,10 @@ export default function LocationPermissionButton() {
   const { handleLocationPermission } = useLocationPermission()
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <Button
         onClick={handleLocationPermission}
-        className="absolute bottom-8 right-0 h-20 rounded-3xl"
+        className="absolute bottom-0 right-4 h-20 rounded-3xl"
       >
         <Image src={Gps} alt="gps" width={40} />
       </Button>
