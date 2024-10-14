@@ -9,7 +9,7 @@ interface LocationInputProps {
   icon: React.ReactNode
 }
 
-export default function LocationInput({
+export default function PlaceInput({
   inputs,
   onChange,
   icon,
@@ -31,7 +31,7 @@ export default function LocationInput({
           어디를 산책할까요?
         </span>
       </div>
-      <Card className="m-5">
+      <Card className="m-5 w-[550px]">
         <Input
           value={inputs[0]}
           icon={icon}

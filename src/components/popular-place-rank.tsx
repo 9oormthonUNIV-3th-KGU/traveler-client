@@ -6,7 +6,7 @@ import GoldIcon from '~/assets/gold.svg'
 import SilverIcon from '~/assets/silver.svg'
 import BronzeIcon from '~/assets/bronze.svg'
 
-export default function PopularLocationRank() {
+export default function PopularPlaceRank() {
   return (
     <Card className="z-10 mx-4">
       <ul>
