@@ -31,7 +31,7 @@ export default function PlaceInput({
           어디를 산책할까요?
         </span>
       </div>
-      <Card className="m-5 w-[550px]">
+      <Card className="m-5 w-full">
         <Input
           value={inputs[0]}
           icon={icon}

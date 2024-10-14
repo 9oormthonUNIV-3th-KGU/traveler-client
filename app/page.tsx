@@ -185,16 +185,16 @@ export default function Home() {
         />
 
         <div className="flex flex-col items-center justify-center">
-          <div className="w-full px-5 py-4">
+          <div className="w-full">
             <Button
               onClick={handleSearchClick}
-              className="h-20 w-[550px] text-extra font-semibold !text-white"
+              className="h-18 w-[600px] text-extra font-semibold !text-white"
             >
               {isLoading ? '로딩 중...' : '길 찾기'}
             </Button>
           </div>
 
-          <div className="mb-5 mt-12">
+          <div className="mt-16 mb-3">
             <span className="text-center text-large font-semibold text-gray-900">
               내 주변 인기있는 장소
             </span>
@@ -246,7 +246,7 @@ export default function Home() {
 
         <Link 
           href="https://7zc54lj88vd.typeform.com/to/Pjwsa8Xz"
-          className={`w-[550px] h-[60px] ${cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}`}
+          className={`w-full h-[60px] ${cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}`}
         >
             제안하러 가기
         </Link>
