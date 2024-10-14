@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import useEmblaCarousel from 'embla-carousel-react'
@@ -43,7 +43,8 @@ export default function OnBoard() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ watchDrag: false })
   const [step, setStep] = useState(1)
 
-  const { isLocationAllowed, handleLocationPermission } = useLocationPermission()
+  const { isLocationAllowed, handleLocationPermission } =
+    useLocationPermission()
 
   const handleNext = () => {
     if (step === 4) {
