@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import useEmblaCarousel from 'embla-carousel-react'
@@ -10,6 +10,7 @@ import { Card, CardDescription, CardTitle } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
 import { ROUTE } from '~/constants/route'
 import { OnBoardIndicator } from '~/components/on-board-indicator'
+import { useLocationPermission } from '~/hooks/use-location-permission'
 
 const steps = [
   {
@@ -40,29 +41,16 @@ const steps = [
 export default function OnBoard() {
   const router = useRouter()
   const [emblaRef, emblaApi] = useEmblaCarousel({ watchDrag: false })
-
   const [step, setStep] = useState(1)
-  const [isLocationAllowed, setIsLocationAllowed] = useState(false)
 
-  useEffect(() => {
-    navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-      if (result.state === 'granted') setIsLocationAllowed(true)
-    })
-  }, [])
+  const { isLocationAllowed, handleLocationPermission } =
+    useLocationPermission()
 
   const handleNext = () => {
     if (step === 4) {
       router.push(ROUTE.MAIN)
     } else if (step === 3 && !isLocationAllowed) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(() => {
-          setIsLocationAllowed(true)
-          setStep(step + 1)
-          emblaApi?.scrollTo(step)
-        }, console.error)
-      } else {
-        console.log('이 브라우저는 위치 정보를 지원하지 않아요.')
-      }
+      handleLocationPermission()
     } else {
       setStep(step + 1)
       emblaApi?.scrollTo(step)
