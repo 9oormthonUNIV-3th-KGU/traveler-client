@@ -188,14 +188,14 @@ export default function Home() {
           <div className="w-full">
             <Button
               onClick={handleSearchClick}
-              className="h-18 text-extra w-[600px] font-semibold !text-white"
+              className="h-18 w-[600px] text-extra font-semibold !text-white"
             >
               {isLoading ? '로딩 중...' : '길 찾기'}
             </Button>
           </div>
 
           <div className="mb-3 mt-16">
-            <span className="text-large text-center font-semibold text-gray-900">
+            <span className="text-center text-large font-semibold text-gray-900">
               내 주변 인기있는 장소
             </span>
           </div>
@@ -230,16 +230,16 @@ export default function Home() {
         </div>
 
         {!isLocationAllowed && (
-          <div className="text-small mt-3 text-center font-medium text-gray-700">
+          <div className="mt-3 text-center text-small font-medium text-gray-700">
             먼저 오른쪽 하단 버튼을 눌러 위치정보를 허용해주세요!
           </div>
         )}
 
         <div className="flex flex-col items-center justify-center">
-          <div className="text-large mb-2 mt-8 text-center font-semibold text-gray-900">
+          <div className="mb-2 mt-8 text-center text-large font-semibold text-gray-900">
             서비스가 마음에 드셨나요?
           </div>
-          <div className="text-small mb-3 text-center font-medium text-gray-700">
+          <div className="mb-3 text-center text-small font-medium text-gray-700">
             서비스 개선을 위해서 제안해주세요!
           </div>
         </div>
