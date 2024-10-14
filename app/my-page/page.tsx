@@ -1,8 +1,9 @@
 import Link from 'next/link'
 
+import { buttonVariants } from '~/components/ui/button'
 import { SiteHeader } from '~/components/site-header'
-import { Button, buttonVariants } from '~/components/ui/button'
 import { RecentPlace } from '~/components/recent-place'
+import { LogoutButton } from '~/components/logout-button'
 import { ROUTE } from '~/constants/route'
 
 export default function MyPage() {
@@ -33,9 +34,7 @@ export default function MyPage() {
           <RecentPlace places={recentPlaces} />
         </div>
         <div className="flex w-full flex-col gap-2">
-          <Button variant="secondary" size="sm">
-            로그아웃
-          </Button>
+          <LogoutButton />
           <Link
             href={ROUTE.QUIT}
             className={buttonVariants({ variant: 'destructive', size: 'sm' })}
