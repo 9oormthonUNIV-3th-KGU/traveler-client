@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Button } from '~/components/ui/button'
+import { Button, buttonVariants } from '~/components/ui/button'
 import { cn } from '~/utils/cn'
 import Gps from '~/assets/gps-green.svg'
 import Main from '~/assets/main.svg'
-import LocationInput from '~/components/location-input'
-import PopularLocationRank from '~/components/popular-location-rank'
+import PlaceInput from '~/components/place-input'
+import PopularPlaceRank from '~/components/popular-place-rank'
 import LocationPermissionButton from '~/components/location-permission-button'
 import { TMap } from '~/components/t-map'
 import { useLocationPermission } from '~/hooks/use-location-permission'
@@ -108,11 +108,11 @@ export default function Home() {
     }
   }
 
-  const handleData = (data: string, index: number) => {
-    const newInputs = [...inputs]
-    newInputs[index] = data
-    setInputs(newInputs)
-  }
+  // const handleData = (data: string, index: number) => {
+  //   const newInputs = [...inputs]
+  //   newInputs[index] = data
+  //   setInputs(newInputs)
+  // }
 
   const handleSearchClick = async () => {
     setIsLoading(true)
@@ -178,24 +178,23 @@ export default function Home() {
     <div className="flex min-h-dvh flex-col justify-center px-5">
       <SiteHeader />
       <div className="flex flex-1 flex-col items-center space-y-8 pb-[76px] pt-6">
-        <LocationInput
+        <PlaceInput
           inputs={inputs}
           onChange={handleInputChange}
           icon={<button onClick={handleGpsClick}>{gpsIcon}</button>}
-          onSendData={handleData}
         />
 
         <div className="flex flex-col items-center justify-center">
-          <div className="w-full px-5 py-4">
+          <div className="w-full">
             <Button
               onClick={handleSearchClick}
-              className="h-20 w-full text-extra font-semibold !text-white"
+              className="h-18 w-[600px] text-extra font-semibold !text-white"
             >
               {isLoading ? '로딩 중...' : '길 찾기'}
             </Button>
           </div>
 
-          <div className="mb-5 mt-12">
+          <div className="mb-3 mt-16">
             <span className="text-center text-large font-semibold text-gray-900">
               내 주변 인기있는 장소
             </span>
@@ -227,7 +226,7 @@ export default function Home() {
               />
             )}
           </div>
-          <PopularLocationRank />
+          <PopularPlaceRank />
         </div>
 
         {!isLocationAllowed && (
@@ -237,25 +236,22 @@ export default function Home() {
         )}
 
         <div className="flex flex-col items-center justify-center">
-          <div className="mb-2 mt-10 text-center text-large font-semibold text-gray-900">
+          <div className="mb-2 mt-8 text-center text-large font-semibold text-gray-900">
             서비스가 마음에 드셨나요?
           </div>
-          <div className="mb-8 text-center text-small font-medium text-gray-700">
+          <div className="mb-3 text-center text-small font-medium text-gray-700">
             서비스 개선을 위해서 제안해주세요!
           </div>
         </div>
 
-        <Link href="https://7zc54lj88vd.typeform.com/to/Pjwsa8Xz">
-          <Button
-            className={cn(
-              'mx-4 h-[60px] w-[95%] bg-primary-200 text-base font-semibold text-primary-500',
-            )}
-          >
-            제안하러 가기
-          </Button>
+        <Link
+          href="https://7zc54lj88vd.typeform.com/to/Pjwsa8Xz"
+          className={`h-[60px] w-full ${cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}`}
+        >
+          제안하러 가기
         </Link>
         <div className="flex justify-center">
-          <Image src={Main} alt="main" width={550} />
+          <Image src={Main} alt="main" width={570} />
         </div>
         <LocationPermissionButton />
       </div>
