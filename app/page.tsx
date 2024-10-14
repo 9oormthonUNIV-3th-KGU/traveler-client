@@ -59,15 +59,6 @@ export default function Home() {
     }
   }, [])
 
-  const handleInputChange = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newInputs = [...inputs]
-    newInputs[index] = event.target.value
-    setInputs(newInputs)
-  }
-
   const handleGpsClick = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -182,7 +173,6 @@ export default function Home() {
       <div className="flex flex-1 flex-col items-center space-y-8 pb-[76px] pt-6">
         <PlaceInput
           inputs={inputs}
-          onChange={handleInputChange}
           icon={<button onClick={handleGpsClick}>{gpsIcon}</button>}
           onSendData={handleData}
           isBottomSheetOpen={isBottomSheetOpen}

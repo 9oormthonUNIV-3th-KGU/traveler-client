@@ -3,15 +3,15 @@ import { useState } from 'react'
 export default function Input({
   value,
   icon,
-  onChange,
   onClick,
   index,
+  readOnly,
 }: {
   value: string
   icon?: React.ReactNode
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onClick: (e: React.MouseEvent<HTMLInputElement>) => void
   index: number
+  readOnly: boolean
 }) {
   const [isFocused, setIsFocused] = useState(false)
 
@@ -28,10 +28,10 @@ export default function Input({
       <input
         className={`w-full flex-col rounded py-3 pl-7 text-extra font-bold outline-none ${isFocused ? 'text-primary-500' : 'text-black'} bg-white`}
         value={value}
-        onChange={onChange}
         onClick={onClick}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        readOnly={readOnly}
         placeholder={index === 0 ? '출발지 입력' : '도착지 입력'}
       />
       {icon && (
