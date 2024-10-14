@@ -1,12 +1,15 @@
 'use client'
 
+import type { CheckedState } from '@radix-ui/react-checkbox'
+
 import { SiteHeader } from '~/components/site-header'
 import { Button } from '~/components/ui/button'
 import { useState } from 'react'
 import { QuitButton } from '~/components/quit-button'
+import { Checkbox } from '~/components/ui/checkbox'
 
 function Step1({ onClickNext }: { onClickNext: () => void }) {
-  const [isChecked, setIsChecked] = useState(false)
+  const [checked, setChecked] = useState<CheckedState>(false)
 
   return (
     <>
@@ -21,15 +24,12 @@ function Step1({ onClickNext }: { onClickNext: () => void }) {
       </div>
       <div className="flex w-full flex-col gap-8">
         <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            onChange={(event) => setIsChecked(event.target.checked)}
-          />
+          <Checkbox checked={checked} onCheckedChange={setChecked} />
           <span className="font-medium text-gray-950">
             탈퇴 시 유의사항을 모두 확인했어요.
           </span>
         </label>
-        <Button size="lg" disabled={!isChecked} onClick={onClickNext}>
+        <Button size="lg" disabled={!checked} onClick={onClickNext}>
           다음
         </Button>
       </div>
@@ -45,6 +45,24 @@ function Step2() {
     '다른 서비스를 사용하고 있어요',
   ] as const
 
+  const [reasons, setReasons] = useState(
+    () => new Set<(typeof SURVEY_ITEMS)[number]>(),
+  )
+
+  const handleCheckedChange = (
+    checked: CheckedState,
+    item: (typeof SURVEY_ITEMS)[number],
+  ) => {
+    setReasons((prev) => {
+      const next = new Set(prev)
+      if (checked) next.add(item)
+      else next.delete(item)
+      return next
+    })
+
+    console.log(reasons)
+  }
+
   return (
     <>
       <h1 className="text-center text-2xl font-semibold">
@@ -53,7 +71,9 @@ function Step2() {
       <div className="flex w-full flex-1 flex-col gap-3.5">
         {SURVEY_ITEMS.map((item) => (
           <label key={item} className="flex items-center gap-2">
-            <input type="checkbox" />
+            <Checkbox
+              onCheckedChange={(checked) => handleCheckedChange(checked, item)}
+            />
             <span className="font-medium text-gray-950">{item}</span>
           </label>
         ))}
