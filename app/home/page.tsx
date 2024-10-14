@@ -17,6 +17,8 @@ import { TMap } from '~/components/t-map'
 import { useLocationPermission } from '~/hooks/use-location-permission'
 
 export default function Home() {
+  const router = useRouter()
+  const { isLocationAllowed } = useLocationPermission()
   const [inputs, setInputs] = useState(['출발지 입력', '도착지 입력'])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -29,13 +31,15 @@ export default function Home() {
     latitude: number
     longitude: number
   } | null>(null)
+
   const [currentLocation, setCurrentLocation] = useState<{
     latitude: number
     longitude: number
   } | null>(null)
 
+  const gpsIcon = <Image src={Gps} alt="gps" width={40} />
+
   useEffect(() => {
-    // 현재 위치 가져오기
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -53,11 +57,6 @@ export default function Home() {
       console.log('이 브라우저는 위치 정보를 지원하지 않습니다.')
     }
   }, [])
-
-  const router = useRouter()
-  const { isLocationAllowed } = useLocationPermission()
-
-  const gpsIcon = <Image src={Gps} alt="gps" width={40} />
 
   const handleInputChange = (
     index: number,
@@ -109,35 +108,10 @@ export default function Home() {
     }
   }
 
-  const handleGeocoding = async (
-    address: string,
-    setLocation: React.Dispatch<
-      React.SetStateAction<{ latitude: number; longitude: number } | null>
-    >,
-  ) => {
-    const appKey = process.env.NEXT_PUBLIC_TMAP_APP_KEY
-    const url = `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?version=1&format=json&appKey=${appKey}&fullAddr=${encodeURIComponent(
-      address,
-    )}`
-
-    try {
-      const response = await fetch(url)
-      const data = await response.json()
-
-      if (data.coordinateInfo && data.coordinateInfo.coordinate.length > 0) {
-        const result = data.coordinateInfo.coordinate[0]
-        const latitude = result.lat.length > 0 ? result.lat : result.newLat
-        const longitude = result.lon.length > 0 ? result.lon : result.newLon
-        setLocation({
-          latitude: parseFloat(latitude),
-          longitude: parseFloat(longitude),
-        })
-      } else {
-        console.error('결과를 찾을 수 없습니다.')
-      }
-    } catch (error) {
-      console.error('요청 실패', error)
-    }
+  const handleData = (data: string, index: number) => {
+    const newInputs = [...inputs]
+    newInputs[index] = data
+    setInputs(newInputs)
   }
 
   const handleSearchClick = async () => {
@@ -171,10 +145,33 @@ export default function Home() {
     }
   }
 
-  const handleData = (data: string, index: number) => {
-    const newInputs = [...inputs]
-    newInputs[index] = data
-    setInputs(newInputs)
+  const handleGeocoding = async (
+    address: string,
+    setLocation: React.Dispatch<
+      React.SetStateAction<{ latitude: number; longitude: number } | null>
+    >,
+  ) => {
+    const appKey = process.env.NEXT_PUBLIC_TMAP_APP_KEY
+    const url = `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?version=1&format=json&appKey=${appKey}&fullAddr=${encodeURIComponent(address)}`
+
+    try {
+      const response = await fetch(url)
+      const data = await response.json()
+
+      if (data.coordinateInfo && data.coordinateInfo.coordinate.length > 0) {
+        const result = data.coordinateInfo.coordinate[0]
+        const latitude = result.lat.length > 0 ? result.lat : result.newLat
+        const longitude = result.lon.length > 0 ? result.lon : result.newLon
+        setLocation({
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+        })
+      } else {
+        console.error('결과를 찾을 수 없습니다.')
+      }
+    } catch (error) {
+      console.error('요청 실패', error)
+    }
   }
 
   return (
