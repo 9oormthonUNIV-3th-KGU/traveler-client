@@ -1,6 +1,6 @@
 'use client'
 
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import {
   AlertDialog,
@@ -16,10 +16,12 @@ import { Button } from '~/components/ui/button'
 import { ROUTE } from '~/constants/route'
 
 function LogoutButton() {
+  const router = useRouter()
+
   const handleLogout = async () => {
     const response = await fetch('/api/logout', { method: 'POST' })
 
-    if (response.ok) redirect(ROUTE.MAIN)
+    if (response.ok) router.push(ROUTE.MAIN)
   }
 
   return (
