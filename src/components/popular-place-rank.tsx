@@ -1,26 +1,46 @@
 import Image from 'next/image'
 
-import { Card } from '~/components/ui/card'
+import GoldMedalIcon from '~/assets/gold.svg'
+import SilverMedalIcon from '~/assets/silver.svg'
+import BronzeMedalIcon from '~/assets/bronze.svg'
 import TrophyIcon from '~/assets/trophy.svg'
-import GoldIcon from '~/assets/gold.svg'
-import SilverIcon from '~/assets/silver.svg'
-import BronzeIcon from '~/assets/bronze.svg'
 
-export default function PopularPlaceRank() {
+function PopularPlaceRank() {
   return (
-    <Card className="z-10 mx-4">
-      <ul>
-        <li className="m-5 mb-12 flex flex-row justify-between">
-          <Image src={GoldIcon} alt="gold" width={50} />
-          <Image src={TrophyIcon} alt="trophy" width={40} />
+    <>
+      <ol className="w-full overflow-hidden rounded bg-white shadow">
+        <li className="relative flex cursor-pointer items-center justify-center px-5 py-4 transition hover:bg-primary-500 hover:text-white">
+          <Image
+            src={GoldMedalIcon}
+            alt="1등"
+            className="absolute left-5 size-9"
+          />
+          <span className="text-xl font-semibold">남영동양문 역삼점</span>
+          <Image
+            src={TrophyIcon}
+            alt="1등"
+            className="absolute right-5 size-9"
+          />
         </li>
-        <li className="m-5 mb-12">
-          <Image src={SilverIcon} alt="silver" width={50} />
+        <li className="relative flex cursor-pointer items-center justify-center px-5 py-4 transition hover:bg-primary-500 hover:text-white">
+          <Image
+            src={SilverMedalIcon}
+            alt="2등"
+            className="absolute left-5 size-9"
+          />
+          <span className="text-xl font-semibold">바게트케이</span>
         </li>
-        <li className="m-5">
-          <Image src={BronzeIcon} alt="bronze" width={50} />
+        <li className="relative flex cursor-pointer items-center justify-center px-5 py-4 transition hover:bg-primary-500 hover:text-white">
+          <Image
+            src={BronzeMedalIcon}
+            alt="3등"
+            className="absolute left-5 size-9"
+          />
+          <span className="text-xl font-semibold">유미식당 본점</span>
         </li>
-      </ul>
-    </Card>
+      </ol>
+    </>
   )
 }
+
+export { PopularPlaceRank }

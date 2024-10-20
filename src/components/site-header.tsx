@@ -11,8 +11,7 @@ function SiteHeader() {
       <Link href={ROUTE.MAIN}>
         <Image src={Logo} alt="산책" className="h-8 w-auto" />
       </Link>
-      {/* TODO: 로그인 유무에 따른 분기 처리 */}
-      <Link href={true ? ROUTE.MYPAGE : ROUTE.LOGIN}>
+      <Link href={ROUTE.MYPAGE}>
         <Image src={User} alt="사용자" className="size-9" />
       </Link>
     </header>
