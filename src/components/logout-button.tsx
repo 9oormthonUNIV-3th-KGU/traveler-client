@@ -19,7 +19,12 @@ function LogoutButton() {
   const router = useRouter()
 
   const handleLogout = () => {
-    router.push(ROUTE.MAIN)
+    fetch('/api/logout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    }).then(() => {
+      router.push(ROUTE.MAIN)
+    })
   }
 
   return (
