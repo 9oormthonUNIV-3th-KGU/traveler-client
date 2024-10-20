@@ -7,13 +7,6 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-pretendard)'],
       },
-      fontSize: {
-        small: '14px',
-        base: '16px',
-        medium: '20px',
-        large: '22px',
-        extra: '24px',
-      },
       colors: {
         gray: {
           50: '#F5F6F8', // background_elevated
