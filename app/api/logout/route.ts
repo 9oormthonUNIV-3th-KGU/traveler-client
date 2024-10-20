@@ -1,5 +1,4 @@
 import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
 
 export async function POST() {
   // 로그아웃 API 요청
@@ -8,5 +7,7 @@ export async function POST() {
   cookieStore.delete('AccessToken')
   cookieStore.delete('RefreshToken')
 
-  return NextResponse.next()
+  return new Response('로그아웃 되었습니다.', {
+    status: 200,
+  })
 }
