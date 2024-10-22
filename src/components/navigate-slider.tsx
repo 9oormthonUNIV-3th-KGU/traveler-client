@@ -13,7 +13,7 @@ function NavigateSlider({ features }: { features: Feature[] }) {
 
   return (
     <div
-      className="absolute bottom-3 z-50 w-full overflow-hidden p-5"
+      className="absolute bottom-3 z-50 w-full select-none overflow-hidden p-5"
       ref={emblaRef}
     >
       <div className="flex w-full gap-2">
