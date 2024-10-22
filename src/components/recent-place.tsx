@@ -29,7 +29,10 @@ async function RecentPlace() {
       ) : (
         <ol className="flex flex-col gap-4">
           {places.map((place, index) => (
-            <RecentPlaceItem key={`${place}-${index}`} place={place} />
+            <RecentPlaceItem
+              key={`${place}-${index}`}
+              place={place.locationName}
+            />
           ))}
         </ol>
       )}
