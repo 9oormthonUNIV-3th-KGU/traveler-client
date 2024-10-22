@@ -1,4 +1,4 @@
-import { tmapInstance } from './instance'
+import { tmapInstance } from '~/apis/instance'
 
 const postRoutesPedestrian = async (data: {
   startX: string
@@ -12,4 +12,11 @@ const postRoutesPedestrian = async (data: {
   return response.data
 }
 
-export { postRoutesPedestrian }
+const getPois = async (searchKeyword: string) => {
+  const response = await tmapInstance.get(
+    `/pois?version=1&searchKeyword=${searchKeyword}&appKey=${process.env.NEXT_PUBLIC_TMAP_APP_KEY}`,
+  )
+  return response.data
+}
+
+export { postRoutesPedestrian, getPois }

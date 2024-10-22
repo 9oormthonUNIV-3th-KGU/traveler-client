@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 import { Card } from '~/components/ui/card'
 import XIcon from '~/assets/x.svg'
+import { postSearchGet } from '~/apis/search'
 
 function RecentPlaceItem({ place }: { place: string }) {
   return (
@@ -14,7 +15,9 @@ function RecentPlaceItem({ place }: { place: string }) {
   )
 }
 
-function RecentPlace({ places }: { places: string[] }) {
+async function RecentPlace() {
+  const places = await postSearchGet()
+
   return (
     <Card className="w-full px-5 py-4">
       {places.length === 0 ? (

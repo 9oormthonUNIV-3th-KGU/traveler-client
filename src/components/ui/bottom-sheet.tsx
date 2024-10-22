@@ -43,7 +43,7 @@ const BottomSheetContent = React.forwardRef<
     <BottomSheetPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed inset-x-0 bottom-0 z-50 mx-auto mt-24 flex h-auto max-w-screen-sm flex-col rounded-t border bg-white px-5 pt-9 shadow',
+        'fixed inset-x-0 bottom-0 z-50 mx-auto mt-24 flex h-auto max-w-screen-sm flex-col rounded-t border bg-white px-5 py-9 shadow',
         className,
       )}
       {...props}

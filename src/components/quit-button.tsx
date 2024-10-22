@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { deleteUserDelete } from '~/apis/user'
 
 import {
   AlertDialog,
@@ -18,8 +19,10 @@ import { ROUTE } from '~/constants/route'
 function QuitButton() {
   const router = useRouter()
 
-  const handleQuit = () => {
-    router.push(ROUTE.MAIN)
+  const handleQuit = async () => {
+    const response = await deleteUserDelete(false)
+
+    if (response === 200) router.push(ROUTE.MAIN)
   }
 
   return (
