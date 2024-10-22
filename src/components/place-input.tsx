@@ -32,9 +32,11 @@ function PlaceInput() {
   const [fromKeyword, setFromKeyword] = useState('')
   const [toKeyword, setToKeyword] = useState('')
   const [fromResult, setFromResult] = useState<
-    { pkey: string; name: string }[]
+    { pkey: string; name: string; noorLat: string; noorLon: string }[]
   >([])
-  const [toResult, setToResult] = useState<{ pkey: string; name: string }[]>([])
+  const [toResult, setToResult] = useState<
+    { pkey: string; name: string; noorLat: string; noorLon: string }[]
+  >([])
 
   useEffect(() => {
     const fetchPlaces = async () => {
