@@ -4,7 +4,7 @@ const deleteUserDelete = async (keepSearchHistory: boolean) => {
   const response = await travelerInstance.delete(
     `/user/delete?keepSearchHistory=${keepSearchHistory}`,
   )
-  return response.data
+  return response.status
 }
 
 const getUserMy = async () => {
