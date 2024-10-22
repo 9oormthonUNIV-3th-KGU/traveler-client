@@ -7,6 +7,7 @@ import { TMap } from '~/components/t-map'
 import { NavigateHeader } from '~/components/navigate-header'
 import { NavigateSlider } from '~/components/navigate-slider'
 import type { Feature } from '~/types/feature'
+import { postRoutesPedestrian } from '~/apis/tmap'
 
 export default function Navigate({
   searchParams,
@@ -40,24 +41,14 @@ export default function Navigate({
 
   useEffect(() => {
     const fetchPath = async () => {
-      const { features: res } = await fetch(
-        'https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            appKey: process.env.NEXT_PUBLIC_TMAP_APP_KEY,
-          },
-          body: JSON.stringify({
-            startX,
-            startY,
-            endX,
-            endY,
-            startName: from,
-            endName: to,
-          }),
-        },
-      ).then((response) => response.json())
+      const { features: res } = await postRoutesPedestrian({
+        startX,
+        startY,
+        endX,
+        endY,
+        startName: from,
+        endName: to,
+      })
 
       setFeatures(res)
     }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { postTokenLogout } from '~/apis/token'
 
 import {
   AlertDialog,
@@ -19,9 +20,9 @@ function LogoutButton() {
   const router = useRouter()
 
   const handleLogout = async () => {
-    const response = await fetch('/api/logout', { method: 'POST' })
+    const response = await postTokenLogout()
 
-    if (response.ok) router.push(ROUTE.MAIN)
+    if (response === 200) router.push(ROUTE.MAIN)
   }
 
   return (
