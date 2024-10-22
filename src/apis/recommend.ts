@@ -1,8 +1,8 @@
 import { travelerInstance } from '~/apis/instance'
 
 const postRecommendLocation = async (data: {
-  latitude: number
-  longitude: number
+  latitude: string
+  longitude: string
 }) => {
   const response = await travelerInstance.post('/recommend/location', data)
   return response.data

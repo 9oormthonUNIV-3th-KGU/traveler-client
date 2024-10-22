@@ -9,11 +9,11 @@ const postSearchGet = async (): Promise<
 
 const postSearchLocation = async (data: {
   locationName: string
-  latitude: number
-  longitude: number
+  latitude: string
+  longitude: string
 }) => {
   const response = await travelerInstance.post('/search/location', data)
-  return response.data
+  return response.status
 }
 
 export { postSearchGet, postSearchLocation }
