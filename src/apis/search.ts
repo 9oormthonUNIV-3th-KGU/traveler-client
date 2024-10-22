@@ -1,6 +1,8 @@
 import { travelerInstance } from '~/apis/instance'
 
-const postSearchGet = async () => {
+const postSearchGet = async (): Promise<
+  { locationName: string; latitude: number; longitude: number }[]
+> => {
   const response = await travelerInstance.post('/search/get')
   return response.data
 }
