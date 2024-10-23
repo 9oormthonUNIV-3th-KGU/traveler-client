@@ -1,3 +1,6 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 import { Card } from '~/components/ui/card'
@@ -15,12 +18,28 @@ function RecentPlaceItem({ place }: { place: string }) {
   )
 }
 
-async function RecentPlace() {
-  const places = await postSearchGet()
+function RecentPlace() {
+  const [places, setPlaces] = useState<
+    | {
+        locationName: string
+        latitude: number
+        longitude: number
+      }[]
+    | null
+  >(null)
+
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      const response = await postSearchGet()
+      setPlaces(response)
+    }
+
+    fetchPlaces()
+  }, [])
 
   return (
     <Card className="w-full px-5 py-4">
-      {places.length === 0 ? (
+      {places?.length === 0 ? (
         <div className="flex h-12 items-center justify-center">
           <span className="text-center font-medium text-gray-500">
             최근 검색한 장소가 없어요
@@ -28,7 +47,7 @@ async function RecentPlace() {
         </div>
       ) : (
         <ol className="flex flex-col gap-4">
-          {places.map((place, index) => (
+          {places?.map((place, index) => (
             <RecentPlaceItem
               key={`${place}-${index}`}
               place={place.locationName}
