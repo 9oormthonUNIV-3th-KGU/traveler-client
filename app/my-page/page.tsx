@@ -1,3 +1,6 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 import { buttonVariants } from '~/components/ui/button'
@@ -7,8 +10,20 @@ import { LogoutButton } from '~/components/logout-button'
 import { ROUTE } from '~/constants/route'
 import { getUserMy } from '~/apis/user'
 
-export default async function MyPage() {
-  const response = await getUserMy()
+export default function MyPage() {
+  const [userInfo, setUserInfo] = useState<{
+    username: string
+    email: string
+  } | null>(null)
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const response = await getUserMy()
+      setUserInfo(response)
+    }
+
+    fetchUserInfo()
+  }, [])
 
   return (
     <div className="flex min-h-dvh flex-col justify-center px-5">
@@ -16,9 +31,9 @@ export default async function MyPage() {
       <div className="flex flex-1 flex-col items-center space-y-8 pb-[76px] pt-6">
         <div className="space-y-2 text-center">
           <h1 className="text-[32px] font-semibold">
-            안녕하세요, {response.username}님
+            안녕하세요, {userInfo?.username}님
           </h1>
-          <p className="font-medium text-gray-800">{response.email}</p>
+          <p className="font-medium text-gray-800">{userInfo?.email}</p>
         </div>
         <div className="flex w-full flex-1 flex-col items-center gap-4">
           <h2 className="text-[22px] font-semibold text-gray-950">
