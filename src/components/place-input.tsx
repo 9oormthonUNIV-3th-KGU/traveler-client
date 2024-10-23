@@ -102,7 +102,7 @@ function PlaceInput() {
               </button>
             </BottomSheetTrigger>
             <BottomSheetContent className="h-[calc(100dvh-52px)]">
-              <div className="mb-6 flex gap-2 overflow-hidden rounded p-5 shadow">
+              <div className="mb-6 flex shrink-0 gap-2 overflow-hidden rounded p-5 shadow">
                 <input
                   type="text"
                   className="w-full text-2xl font-medium text-gray-950 placeholder:text-gray-950"
@@ -110,11 +110,11 @@ function PlaceInput() {
                   value={fromKeyword}
                   onChange={(e) => setFromKeyword(e.target.value)}
                 />
-                <button type="button" className="size-8 shrink-0">
-                  <Image src={SearchIcon} alt="검색" className="size-8" />
+                <button type="button" className="size-8">
+                  <Image src={SearchIcon} alt="검색" />
                 </button>
               </div>
-              <ScrollArea className="h-[calc(100vh-168px)]">
+              <ScrollArea className="h-full max-h-[calc(100vh-168px)]">
                 <ul className="space-y-5">
                   {fromResult?.map((poi) => (
                     <li
@@ -147,7 +147,7 @@ function PlaceInput() {
               </button>
             </BottomSheetTrigger>
             <BottomSheetContent className="h-[calc(100dvh-52px)]">
-              <div className="mb-6 flex gap-2 overflow-hidden rounded p-5 shadow">
+              <div className="mb-6 flex shrink-0 gap-2 overflow-hidden rounded p-5 shadow">
                 <input
                   type="text"
                   className="w-full text-2xl font-medium text-gray-950 placeholder:text-gray-950"
@@ -155,11 +155,11 @@ function PlaceInput() {
                   value={toKeyword}
                   onChange={(e) => setToKeyword(e.target.value)}
                 />
-                <button type="button" className="size-8 shrink-0">
-                  <Image src={SearchIcon} alt="검색" className="size-8" />
+                <button type="button" className="size-8">
+                  <Image src={SearchIcon} alt="검색" />
                 </button>
               </div>
-              <ScrollArea className="h-[calc(100vh-168px)]">
+              <ScrollArea className="h-full max-h-[calc(100vh-168px)]">
                 <ul className="space-y-5">
                   {toResult?.map((poi) => (
                     <li
