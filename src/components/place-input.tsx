@@ -16,6 +16,7 @@ import { getPois } from '~/apis/tmap'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { ROUTE } from '~/constants/route'
 import { postSearchLocation } from '~/apis/search'
+import { useDebounce } from '~/hooks/use-debounce'
 
 function PlaceInput() {
   const router = useRouter()
@@ -38,34 +39,36 @@ function PlaceInput() {
   const [toResult, setToResult] = useState<
     { pkey: string; name: string; noorLat: string; noorLon: string }[]
   >([])
+  const debouncedFromKeyword = useDebounce(fromKeyword, 200)
+  const debouncedToKeyword = useDebounce(toKeyword, 200)
 
   useEffect(() => {
     const fetchPlaces = async () => {
-      if (fromKeyword === '') {
+      if (debouncedFromKeyword === '') {
         setFromResult([])
         return
       }
 
-      const response = await getPois(fromKeyword)
+      const response = await getPois(debouncedFromKeyword)
       setFromResult(response?.searchPoiInfo?.pois?.poi)
     }
 
     fetchPlaces()
-  }, [fromKeyword])
+  }, [debouncedFromKeyword])
 
   useEffect(() => {
     const fetchPlaces = async () => {
-      if (toKeyword === '') {
+      if (debouncedToKeyword === '') {
         setToResult([])
         return
       }
 
-      const response = await getPois(toKeyword)
+      const response = await getPois(debouncedToKeyword)
       setToResult(response?.searchPoiInfo?.pois?.poi)
     }
 
     fetchPlaces()
-  }, [toKeyword])
+  }, [debouncedToKeyword])
 
   const handleSubmit = async () => {
     if (from !== null && to !== null) {
