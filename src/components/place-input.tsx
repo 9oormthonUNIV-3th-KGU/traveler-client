@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
 
 import { Button } from '~/components/ui/button'
 import {
@@ -68,16 +69,19 @@ function PlaceInput() {
 
   const handleSubmit = async () => {
     if (from !== null && to !== null) {
-      const response = await postSearchLocation({
-        locationName: to.name,
-        longitude: to.noorLon,
-        latitude: to.noorLat,
-      })
+      if (Cookies.get('AccessToken')) {
+        const response = await postSearchLocation({
+          locationName: to.name,
+          longitude: to.noorLon,
+          latitude: to.noorLat,
+        })
 
-      if (response === 200)
-        router.push(
-          `${ROUTE.NAVIGATE}?from=${from?.name}&to=${to?.name}&startX=${from?.noorLon}&startY=${from?.noorLat}&endX=${to?.noorLon}&endY=${to?.noorLat}`,
-        )
+        if (response !== 200) console.log("Couldn't save search location")
+      }
+
+      router.push(
+        `${ROUTE.NAVIGATE}?from=${from?.name}&to=${to?.name}&startX=${from?.noorLon}&startY=${from?.noorLat}&endX=${to?.noorLon}&endY=${to?.noorLat}`,
+      )
     }
   }
 
