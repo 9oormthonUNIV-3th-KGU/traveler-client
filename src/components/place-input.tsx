@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import Cookies from 'js-cookie'
 
 import { Button } from '~/components/ui/button'
 import {
@@ -16,6 +15,7 @@ import { getPois } from '~/apis/tmap'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { ROUTE } from '~/constants/route'
 import { postSearchLocation } from '~/apis/search'
+import { useDebounce } from '~/hooks/use-debounce'
 
 function PlaceInput() {
   const router = useRouter()
@@ -38,38 +38,40 @@ function PlaceInput() {
   const [toResult, setToResult] = useState<
     { pkey: string; name: string; noorLat: string; noorLon: string }[]
   >([])
+  const debouncedFromKeyword = useDebounce(fromKeyword, 200)
+  const debouncedToKeyword = useDebounce(toKeyword, 200)
 
   useEffect(() => {
     const fetchPlaces = async () => {
-      if (fromKeyword === '') {
+      if (debouncedFromKeyword === '') {
         setFromResult([])
         return
       }
 
-      const response = await getPois(fromKeyword)
+      const response = await getPois(debouncedFromKeyword)
       setFromResult(response?.searchPoiInfo?.pois?.poi)
     }
 
     fetchPlaces()
-  }, [fromKeyword])
+  }, [debouncedFromKeyword])
 
   useEffect(() => {
     const fetchPlaces = async () => {
-      if (toKeyword === '') {
+      if (debouncedToKeyword === '') {
         setToResult([])
         return
       }
 
-      const response = await getPois(toKeyword)
+      const response = await getPois(debouncedToKeyword)
       setToResult(response?.searchPoiInfo?.pois?.poi)
     }
 
     fetchPlaces()
-  }, [toKeyword])
+  }, [debouncedToKeyword])
 
   const handleSubmit = async () => {
     if (from !== null && to !== null) {
-      if (Cookies.get('AccessToken')) {
+      try {
         const response = await postSearchLocation({
           locationName: to.name,
           longitude: to.noorLon,
@@ -77,11 +79,13 @@ function PlaceInput() {
         })
 
         if (response !== 200) console.log("Couldn't save search location")
+      } catch (error) {
+        console.error(error)
+      } finally {
+        router.push(
+          `${ROUTE.NAVIGATE}?from=${from?.name}&to=${to?.name}&startX=${from?.noorLon}&startY=${from?.noorLat}&endX=${to?.noorLon}&endY=${to?.noorLat}`,
+        )
       }
-
-      router.push(
-        `${ROUTE.NAVIGATE}?from=${from?.name}&to=${to?.name}&startX=${from?.noorLon}&startY=${from?.noorLat}&endX=${to?.noorLon}&endY=${to?.noorLat}`,
-      )
     }
   }
 
@@ -99,7 +103,7 @@ function PlaceInput() {
               </button>
             </BottomSheetTrigger>
             <BottomSheetContent className="h-[calc(100dvh-52px)]">
-              <div className="mb-6 flex gap-2 overflow-hidden rounded p-5 shadow">
+              <div className="mb-6 flex shrink-0 gap-2 overflow-hidden rounded p-5 shadow">
                 <input
                   type="text"
                   className="w-full text-2xl font-medium text-gray-950 placeholder:text-gray-950"
@@ -107,11 +111,11 @@ function PlaceInput() {
                   value={fromKeyword}
                   onChange={(e) => setFromKeyword(e.target.value)}
                 />
-                <button type="button" className="size-8 shrink-0">
-                  <Image src={SearchIcon} alt="검색" className="size-8" />
+                <button type="button" className="size-8">
+                  <Image src={SearchIcon} alt="검색" />
                 </button>
               </div>
-              <ScrollArea className="h-[calc(100vh-168px)]">
+              <ScrollArea className="h-full max-h-[calc(100vh-168px)]">
                 <ul className="space-y-5">
                   {fromResult?.map((poi) => (
                     <li
@@ -144,7 +148,7 @@ function PlaceInput() {
               </button>
             </BottomSheetTrigger>
             <BottomSheetContent className="h-[calc(100dvh-52px)]">
-              <div className="mb-6 flex gap-2 overflow-hidden rounded p-5 shadow">
+              <div className="mb-6 flex shrink-0 gap-2 overflow-hidden rounded p-5 shadow">
                 <input
                   type="text"
                   className="w-full text-2xl font-medium text-gray-950 placeholder:text-gray-950"
@@ -152,11 +156,11 @@ function PlaceInput() {
                   value={toKeyword}
                   onChange={(e) => setToKeyword(e.target.value)}
                 />
-                <button type="button" className="size-8 shrink-0">
-                  <Image src={SearchIcon} alt="검색" className="size-8" />
+                <button type="button" className="size-8">
+                  <Image src={SearchIcon} alt="검색" />
                 </button>
               </div>
-              <ScrollArea className="h-[calc(100vh-168px)]">
+              <ScrollArea className="h-full max-h-[calc(100vh-168px)]">
                 <ul className="space-y-5">
                   {toResult?.map((poi) => (
                     <li
