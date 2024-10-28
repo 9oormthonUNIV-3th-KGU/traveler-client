@@ -8,7 +8,7 @@ import { Button } from '~/components/ui/button'
 import {
   BottomSheet,
   BottomSheetContent,
-  BottomSheetTrigger,
+  BottomSheetTitle,
 } from '~/components/ui/bottom-sheet'
 import SearchIcon from '~/assets/search.svg'
 import { getPois } from '~/apis/tmap'
@@ -16,58 +16,45 @@ import { ScrollArea } from '~/components/ui/scroll-area'
 import { ROUTE } from '~/constants/route'
 import { postSearchLocation } from '~/apis/search'
 import { useDebounce } from '~/hooks/use-debounce'
+import type { PlaceResult } from '~/types/t-map'
 
 function PlaceInput() {
   const router = useRouter()
 
-  const [from, setFrom] = useState<{
-    name: string
-    noorLat: string
-    noorLon: string
-  } | null>(null)
-  const [to, setTo] = useState<{
-    name: string
-    noorLat: string
-    noorLon: string
-  } | null>(null)
-  const [fromKeyword, setFromKeyword] = useState('')
-  const [toKeyword, setToKeyword] = useState('')
-  const [fromResult, setFromResult] = useState<
-    { pkey: string; name: string; noorLat: string; noorLon: string }[]
-  >([])
-  const [toResult, setToResult] = useState<
-    { pkey: string; name: string; noorLat: string; noorLon: string }[]
-  >([])
-  const debouncedFromKeyword = useDebounce(fromKeyword, 200)
-  const debouncedToKeyword = useDebounce(toKeyword, 200)
+  const [open, setOpen] = useState(false)
+  const [target, setTarget] = useState<'출발지' | '도착지' | null>()
+  const [placeKeyword, setPlaceKeyword] = useState('')
+  const [placeResult, setPlaceResult] = useState<PlaceResult[]>([])
+  const [from, setFrom] = useState<PlaceResult>(null)
+  const [to, setTo] = useState<PlaceResult>(null)
+
+  const debouncedPlaceKeyword = useDebounce(placeKeyword, 200)
 
   useEffect(() => {
     const fetchPlaces = async () => {
-      if (debouncedFromKeyword === '') {
-        setFromResult([])
-        return
+      if (debouncedPlaceKeyword === '') {
+        setPlaceResult([])
+      } else {
+        const response = await getPois(debouncedPlaceKeyword)
+        setPlaceResult(response?.searchPoiInfo?.pois?.poi)
       }
-
-      const response = await getPois(debouncedFromKeyword)
-      setFromResult(response?.searchPoiInfo?.pois?.poi)
     }
 
     fetchPlaces()
-  }, [debouncedFromKeyword])
+  }, [debouncedPlaceKeyword])
 
-  useEffect(() => {
-    const fetchPlaces = async () => {
-      if (debouncedToKeyword === '') {
-        setToResult([])
-        return
-      }
+  const handleTriggerBottomSheet = (target: '출발지' | '도착지') => {
+    setTarget(target)
+    setPlaceResult([])
+    setPlaceKeyword((target === '출발지' ? from?.name : to?.name) || '')
+    setOpen(true)
+  }
 
-      const response = await getPois(debouncedToKeyword)
-      setToResult(response?.searchPoiInfo?.pois?.poi)
-    }
-
-    fetchPlaces()
-  }, [debouncedToKeyword])
+  const handleUpdatePlace = (poi: PlaceResult) => {
+    if (target === '출발지') setFrom(poi)
+    else setTo(poi)
+    setOpen(false)
+  }
 
   const handleSubmit = async () => {
     if (from !== null && to !== null) {
@@ -91,97 +78,58 @@ function PlaceInput() {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <div className="flex flex-col divide-y-2 divide-dashed divide-gray-200 rounded bg-white p-5 shadow">
-        <div className="pb-5">
-          <BottomSheet>
-            <BottomSheetTrigger asChild>
-              <button
-                type="button"
-                className="w-full text-start text-2xl font-bold text-primary-500"
-              >
-                {from ? from.name : '출발지 입력'}
+      <div className="flex flex-col rounded bg-white p-5 shadow">
+        <BottomSheet open={open} onOpenChange={setOpen}>
+          <div className="divide-y-2 divide-dashed divide-gray-200">
+            <button
+              type="button"
+              className="w-full pb-5 text-start text-2xl font-bold text-primary-500"
+              onClick={() => handleTriggerBottomSheet('출발지')}
+            >
+              {from ? from.name : '출발지 입력'}
+            </button>
+            <button
+              type="button"
+              className="w-full pt-5 text-start text-2xl font-medium text-gray-950"
+              onClick={() => handleTriggerBottomSheet('도착지')}
+            >
+              {to ? to.name : '도착지 입력'}
+            </button>
+          </div>
+          <BottomSheetContent className="h-[calc(100dvh-52px)]">
+            <BottomSheetTitle className="sr-only">장소 검색</BottomSheetTitle>
+            <div className="mb-6 flex shrink-0 gap-2 overflow-hidden rounded p-5 shadow">
+              <input
+                type="text"
+                className="w-full text-2xl font-medium text-gray-950 placeholder:text-gray-950 focus:outline-none"
+                placeholder={`${target} 입력`}
+                value={placeKeyword}
+                onChange={(e) => setPlaceKeyword(e.target.value)}
+              />
+              <button type="button" className="size-8">
+                <Image src={SearchIcon} alt="검색" />
               </button>
-            </BottomSheetTrigger>
-            <BottomSheetContent className="h-[calc(100dvh-52px)]">
-              <div className="mb-6 flex shrink-0 gap-2 overflow-hidden rounded p-5 shadow">
-                <input
-                  type="text"
-                  className="w-full text-2xl font-medium text-gray-950 placeholder:text-gray-950"
-                  placeholder="출발지 입력"
-                  value={fromKeyword}
-                  onChange={(e) => setFromKeyword(e.target.value)}
-                />
-                <button type="button" className="size-8">
-                  <Image src={SearchIcon} alt="검색" />
-                </button>
-              </div>
-              <ScrollArea className="h-full max-h-[calc(100vh-168px)]">
-                <ul className="space-y-5">
-                  {fromResult?.map((poi) => (
-                    <li
-                      key={poi.pkey}
+            </div>
+            <ScrollArea className="h-full max-h-[calc(100vh-168px)]">
+              <ul className="space-y-5">
+                {placeResult?.map((poi) => (
+                  <li key={poi?.pkey}>
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePlace(poi)}
                       className="flex cursor-pointer items-center gap-4"
-                      onClick={() => {
-                        setFromKeyword(poi.name)
-                        setFrom(poi)
-                      }}
                     >
                       <Image src={SearchIcon} alt="검색" className="size-7" />
                       <span className="line-clamp-1 text-xl font-medium text-gray-950">
-                        {poi.name}
+                        {poi?.name}
                       </span>
-                    </li>
-                  ))}
-                </ul>
-              </ScrollArea>
-            </BottomSheetContent>
-          </BottomSheet>
-        </div>
-        <div className="pt-5">
-          <BottomSheet>
-            <BottomSheetTrigger asChild>
-              <button
-                type="button"
-                className="w-full text-start text-2xl font-medium text-gray-950"
-              >
-                {to ? to.name : '도착지 입력'}
-              </button>
-            </BottomSheetTrigger>
-            <BottomSheetContent className="h-[calc(100dvh-52px)]">
-              <div className="mb-6 flex shrink-0 gap-2 overflow-hidden rounded p-5 shadow">
-                <input
-                  type="text"
-                  className="w-full text-2xl font-medium text-gray-950 placeholder:text-gray-950"
-                  placeholder="도착지 입력"
-                  value={toKeyword}
-                  onChange={(e) => setToKeyword(e.target.value)}
-                />
-                <button type="button" className="size-8">
-                  <Image src={SearchIcon} alt="검색" />
-                </button>
-              </div>
-              <ScrollArea className="h-full max-h-[calc(100vh-168px)]">
-                <ul className="space-y-5">
-                  {toResult?.map((poi) => (
-                    <li
-                      key={poi.pkey}
-                      className="flex cursor-pointer items-center gap-4"
-                      onClick={() => {
-                        setToKeyword(poi.name)
-                        setTo(poi)
-                      }}
-                    >
-                      <Image src={SearchIcon} alt="검색" className="size-7" />
-                      <span className="line-clamp-1 text-xl font-medium text-gray-950">
-                        {poi.name}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </ScrollArea>
-            </BottomSheetContent>
-          </BottomSheet>
-        </div>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </ScrollArea>
+          </BottomSheetContent>
+        </BottomSheet>
       </div>
       <Button
         size="lg"
