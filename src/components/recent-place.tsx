@@ -31,7 +31,6 @@ function RecentPlace() {
   useEffect(() => {
     const fetchPlaces = async () => {
       const response = await postSearchGet()
-      console.log(response)
       setPlaces(response)
     }
 

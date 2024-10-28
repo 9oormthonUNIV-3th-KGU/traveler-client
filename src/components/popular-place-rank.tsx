@@ -4,18 +4,22 @@ import GoldMedalIcon from '~/assets/gold.svg'
 import SilverMedalIcon from '~/assets/silver.svg'
 import BronzeMedalIcon from '~/assets/bronze.svg'
 import TrophyIcon from '~/assets/trophy.svg'
+import { TMiniMap } from '~/components/t-mini-map'
 
 function PopularPlaceRank() {
   return (
-    <>
-      <ol className="w-full overflow-hidden rounded bg-white shadow">
+    <div className="w-full overflow-hidden rounded shadow">
+      <TMiniMap />
+      <ol className="relative z-50 -mt-8 w-full overflow-hidden rounded bg-white shadow">
         <li className="relative flex cursor-pointer items-center justify-center px-5 py-4 transition hover:bg-primary-500 hover:text-white">
           <Image
             src={GoldMedalIcon}
             alt="1등"
             className="absolute left-5 size-9"
           />
-          <span className="text-xl font-semibold">남영동양문 역삼점</span>
+          <span className="line-clamp-1 w-[calc(100vw-152px)] text-xl font-semibold">
+            남영동양문 역삼점
+          </span>
           <Image
             src={TrophyIcon}
             alt="1등"
@@ -28,7 +32,9 @@ function PopularPlaceRank() {
             alt="2등"
             className="absolute left-5 size-9"
           />
-          <span className="text-xl font-semibold">바게트케이</span>
+          <span className="line-clamp-1 w-[calc(100vw-152px)] text-xl font-semibold">
+            바게트케이
+          </span>
         </li>
         <li className="relative flex cursor-pointer items-center justify-center px-5 py-4 transition hover:bg-primary-500 hover:text-white">
           <Image
@@ -36,10 +42,12 @@ function PopularPlaceRank() {
             alt="3등"
             className="absolute left-5 size-9"
           />
-          <span className="text-xl font-semibold">유미식당 본점</span>
+          <span className="line-clamp-1 w-[calc(100vw-152px)] text-xl font-semibold">
+            유미식당 본점
+          </span>
         </li>
       </ol>
-    </>
+    </div>
   )
 }
 

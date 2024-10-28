@@ -3,14 +3,14 @@
 import { useEffect, useRef } from 'react'
 
 import type { TTMap } from '~/types/t-map'
-// import type { Feature } from '~/types/feature'
+import type { Feature } from '~/types/feature'
 
 function TMap({
-  // features,
+  features,
   from,
   to,
 }: {
-  // features: Feature[];
+  features: Feature[]
   from: { title: string; x: string; y: string }
   to: { title: string; x: string; y: string }
 }) {
@@ -41,12 +41,32 @@ function TMap({
       map: map.current,
     })
 
+    const paths = []
+
+    for (const feature of features) {
+      if (feature.geometry.type === 'LineString') {
+        for (const coordinate of feature.geometry.coordinates) {
+          const point = new window.Tmapv3.LatLng(coordinate[1], coordinate[0])
+          paths.push(point)
+        }
+      }
+    }
+
+    const polylines = new window.Tmapv3.Polyline({
+      path: paths,
+      strokeColor: '#dd00dd',
+      strokeWeight: 6,
+      map: map.current,
+    })
+
+    console.log(polylines)
+
     const PTbounds = new Tmapv3.LatLngBounds()
     PTbounds.extend(fromLatLng)
     PTbounds.extend(toLatLng)
 
     map.current?.fitBounds(PTbounds)
-  }, [from, to])
+  }, [from, to, features])
 
   return <div id="map_div" className="overflow-hidden" />
 }

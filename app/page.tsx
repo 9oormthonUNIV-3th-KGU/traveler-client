@@ -10,7 +10,7 @@ import { cn } from '~/utils/cn'
 
 export default function Home() {
   return (
-    <div className="flex min-h-dvh flex-col justify-center px-5">
+    <div className="flex min-h-dvh flex-col justify-center px-5 text-center">
       <SiteHeader />
       <div className="flex w-full flex-1 flex-col items-center py-4">
         <section className="mb-8 flex w-full flex-col items-center gap-2">
