@@ -8,13 +8,19 @@ export async function middleware(request: NextRequest) {
   if (accessToken && refreshToken) return NextResponse.next()
 
   if (!accessToken && refreshToken) {
-    await fetch('https://api.travelersenior.site/api/token/reissue', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${request.cookies.get('RefreshToken')}`,
+    const response = await fetch(
+      'https://api.travelersenior.site/api/token/reissue',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${request.cookies.get('RefreshToken')}`,
+        },
       },
-    })
+    )
+
+    console.log(response)
+
     return NextResponse.next()
   }
 
