@@ -12,6 +12,8 @@ import { buttonVariants } from '~/components/ui/button'
 import { cn } from '~/utils/cn'
 
 export default function Home() {
+  console.log(Cookies.get('AccessToken'))
+
   return (
     <div className="flex min-h-dvh flex-col justify-center px-5 text-center">
       <SiteHeader />
