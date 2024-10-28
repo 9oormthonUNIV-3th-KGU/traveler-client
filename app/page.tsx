@@ -1,9 +1,6 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
 import Cookies from 'js-cookie'
-import { useEffect, useState } from 'react'
 
 import Main from '~/assets/main.svg'
 import { PlaceInput } from '~/components/place-input'
@@ -13,12 +10,6 @@ import { buttonVariants } from '~/components/ui/button'
 import { cn } from '~/utils/cn'
 
 export default function Home() {
-  const [authenticated, setAuthenticated] = useState(false)
-
-  useEffect(() => {
-    if (Cookies.get('AccessToken') !== undefined) setAuthenticated(true)
-  }, [])
-
   return (
     <div className="flex min-h-dvh flex-col justify-center px-5 text-center">
       <SiteHeader />
@@ -34,7 +25,7 @@ export default function Home() {
             내 주변 인기 있는 장소
           </h2>
           <PopularPlaceRank />
-          {authenticated ? (
+          {Cookies.get('AccessToken') ? (
             <span className="text-sm font-medium text-gray-500">
               먼저, 위치정보를 허용해주세요!
             </span>
