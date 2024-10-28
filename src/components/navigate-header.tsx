@@ -8,11 +8,13 @@ import { ROUTE } from '~/constants/route'
 function NavigateHeader({
   from,
   to,
+  mode,
   time,
   distance,
 }: {
   from: { title: string; x: string; y: string }
   to: { title: string; x: string; y: string }
+  mode: string
   time: number
   distance: number
 }) {
@@ -47,6 +49,7 @@ function NavigateHeader({
                 startY: to.y,
                 endX: from.x,
                 endY: from.y,
+                mode,
               },
             }}
           >
