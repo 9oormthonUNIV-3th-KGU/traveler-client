@@ -4,11 +4,13 @@ import GoldMedalIcon from '~/assets/gold.svg'
 import SilverMedalIcon from '~/assets/silver.svg'
 import BronzeMedalIcon from '~/assets/bronze.svg'
 import TrophyIcon from '~/assets/trophy.svg'
+import { TMiniMap } from '~/components/t-mini-map'
 
 function PopularPlaceRank() {
   return (
-    <>
-      <ol className="w-full overflow-hidden rounded bg-white shadow">
+    <div className="w-full overflow-hidden rounded shadow">
+      <TMiniMap />
+      <ol className="relative z-50 -mt-8 w-full overflow-hidden rounded bg-white shadow">
         <li className="relative flex cursor-pointer items-center justify-center px-5 py-4 transition hover:bg-primary-500 hover:text-white">
           <Image
             src={GoldMedalIcon}
@@ -45,7 +47,7 @@ function PopularPlaceRank() {
           </span>
         </li>
       </ol>
-    </>
+    </div>
   )
 }
 
