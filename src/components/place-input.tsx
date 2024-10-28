@@ -17,6 +17,7 @@ import { ROUTE } from '~/constants/route'
 import { postSearchLocation } from '~/apis/search'
 import { useDebounce } from '~/hooks/use-debounce'
 import type { POI } from '~/types/t-map'
+import { cn } from '~/utils/cn'
 
 function PlaceInput() {
   const router = useRouter()
@@ -83,17 +84,49 @@ function PlaceInput() {
           <div className="divide-y-2 divide-dashed divide-gray-200">
             <button
               type="button"
-              className="w-full pb-5 text-start text-2xl font-bold text-primary-500"
+              className="w-full pb-5 text-start"
               onClick={() => handleTriggerBottomSheet('출발지')}
             >
-              {from ? from.name : '출발지 입력'}
+              {from ? (
+                <div className="flex w-full justify-between gap-4">
+                  <span className="shrink-0 text-2xl font-medium text-gray-700">
+                    출발지
+                  </span>
+                  <span className="line-clamp-1 text-right text-2xl font-medium text-gray-950">
+                    {from.name}
+                  </span>
+                </div>
+              ) : (
+                <span className="text-2xl font-bold text-primary-500">
+                  출발지 입력
+                </span>
+              )}
             </button>
             <button
               type="button"
-              className="w-full pt-5 text-start text-2xl font-medium text-gray-950"
+              className="w-full pt-5 text-start"
               onClick={() => handleTriggerBottomSheet('도착지')}
             >
-              {to ? to.name : '도착지 입력'}
+              {to ? (
+                <div className="flex w-full justify-between gap-4">
+                  <span className="shrink-0 text-2xl font-medium text-gray-700">
+                    도착지
+                  </span>
+                  <span className="line-clamp-1 text-right text-2xl font-medium text-gray-950">
+                    {to.name}
+                  </span>
+                </div>
+              ) : (
+                <span
+                  className={cn(
+                    from
+                      ? 'text-2xl font-bold text-primary-500'
+                      : 'text-2xl font-medium text-gray-950',
+                  )}
+                >
+                  도착지 입력
+                </span>
+              )}
             </button>
           </div>
           <BottomSheetContent className="h-[calc(100dvh-52px)]">
