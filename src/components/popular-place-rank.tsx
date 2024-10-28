@@ -17,7 +17,8 @@ function PopularPlaceRank() {
       <ol
         className={cn(
           'relative z-10 -mt-8 w-full select-none overflow-hidden rounded bg-white shadow',
-          !Cookies.get('AccessToken') && 'pointer-events-none blur-sm',
+          Cookies.get('AccessToken') === undefined &&
+            'pointer-events-none blur-sm',
         )}
       >
         <li className="relative flex cursor-pointer items-center justify-center px-5 py-4 transition hover:bg-primary-500 hover:text-white">

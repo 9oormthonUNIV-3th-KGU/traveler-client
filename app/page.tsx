@@ -27,11 +27,7 @@ export default function Home() {
             내 주변 인기 있는 장소
           </h2>
           <PopularPlaceRank />
-          {Cookies.get('AccessToken') ? (
-            <span className="text-sm font-medium text-gray-500">
-              먼저, 위치정보를 허용해주세요!
-            </span>
-          ) : (
+          {Cookies.get('AccessToken') === undefined ? (
             <div className="flex w-full flex-col gap-3">
               <span className="text-sm font-medium text-gray-500">
                 인기 있는 장소를 확인하기 위해서는 로그인 해주세요
@@ -43,6 +39,10 @@ export default function Home() {
                 로그인하기
               </Link>
             </div>
+          ) : (
+            <span className="text-sm font-medium text-gray-500">
+              먼저, 위치정보를 허용해주세요!
+            </span>
           )}
         </section>
         <section className="flex w-full flex-col items-center">
