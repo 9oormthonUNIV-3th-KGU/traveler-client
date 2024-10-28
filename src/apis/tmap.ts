@@ -7,6 +7,7 @@ const postRoutesPedestrian = async (data: {
   endY: string
   startName: string
   endName: string
+  searchOption: string
 }) => {
   const response = await tmapInstance.post('/routes/pedestrian?version=1', data)
   return response.data

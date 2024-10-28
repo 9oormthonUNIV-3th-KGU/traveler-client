@@ -19,12 +19,13 @@ export default function Navigate({
     startY?: string
     endX?: string
     endY?: string
+    mode?: string
   }
 }) {
-  const { from, to, startX, startY, endX, endY } = searchParams
+  const { from, to, startX, startY, endX, endY, mode } = searchParams
   const [features, setFeatures] = useState<Feature[] | null>(null)
 
-  if (!from || !to || !startX || !startY || !endX || !endY) {
+  if (!from || !to || !startX || !startY || !endX || !endY || !mode) {
     notFound()
   }
 
@@ -48,13 +49,14 @@ export default function Navigate({
         endY,
         startName: from,
         endName: to,
+        searchOption: mode,
       })
 
       setFeatures(res)
     }
 
     fetchPath()
-  }, [startX, startY, endX, endY, from, to])
+  }, [startX, startY, endX, endY, from, to, mode])
 
   return (
     features && (

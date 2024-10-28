@@ -28,6 +28,7 @@ function PlaceInput() {
   const [placeResult, setPlaceResult] = useState<POI[]>([])
   const [from, setFrom] = useState<POI>(null)
   const [to, setTo] = useState<POI>(null)
+  const [mode, setMode] = useState<0 | 10 | 30>(0) // 0: 최적 경로, 10: 최단 경로, 30: 편안한 경로
 
   const debouncedPlaceKeyword = useDebounce(placeKeyword, 200)
 
@@ -71,7 +72,7 @@ function PlaceInput() {
         console.error(error)
       } finally {
         router.push(
-          `${ROUTE.NAVIGATE}?from=${from?.name}&to=${to?.name}&startX=${from?.noorLon}&startY=${from?.noorLat}&endX=${to?.noorLon}&endY=${to?.noorLat}`,
+          `${ROUTE.NAVIGATE}?from=${from?.name}&to=${to?.name}&startX=${from?.noorLon}&startY=${from?.noorLat}&endX=${to?.noorLon}&endY=${to?.noorLat}&mode=${mode}`,
         )
       }
     }
@@ -164,6 +165,46 @@ function PlaceInput() {
           </BottomSheetContent>
         </BottomSheet>
       </div>
+      {from && to && (
+        <div className="flex flex-col divide-y-[1px] divide-white rounded bg-primary-100 px-5 py-2">
+          <button
+            type="button"
+            className={cn(
+              mode === 0
+                ? 'text-2xl font-bold text-gray-950'
+                : 'text-2xl font-medium text-gray-500',
+              'pb-2 transition-colors',
+            )}
+            onClick={() => setMode(0)}
+          >
+            최적 경로
+          </button>
+          <button
+            type="button"
+            className={cn(
+              mode === 10
+                ? 'text-2xl font-bold text-gray-950'
+                : 'text-2xl font-medium text-gray-500',
+              'py-2 transition-colors',
+            )}
+            onClick={() => setMode(10)}
+          >
+            최단 경로
+          </button>
+          <button
+            type="button"
+            className={cn(
+              mode === 30
+                ? 'text-2xl font-bold text-gray-950'
+                : 'text-2xl font-medium text-gray-500',
+              'pt-2 transition-colors',
+            )}
+            onClick={() => setMode(30)}
+          >
+            편안한 경로
+          </button>
+        </div>
+      )}
       <Button
         size="lg"
         disabled={from === null || to === null}
