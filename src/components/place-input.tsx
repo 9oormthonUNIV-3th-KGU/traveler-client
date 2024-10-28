@@ -16,7 +16,7 @@ import { ScrollArea } from '~/components/ui/scroll-area'
 import { ROUTE } from '~/constants/route'
 import { postSearchLocation } from '~/apis/search'
 import { useDebounce } from '~/hooks/use-debounce'
-import type { PlaceResult } from '~/types/t-map'
+import type { POI } from '~/types/t-map'
 
 function PlaceInput() {
   const router = useRouter()
@@ -24,9 +24,9 @@ function PlaceInput() {
   const [open, setOpen] = useState(false)
   const [target, setTarget] = useState<'출발지' | '도착지' | null>()
   const [placeKeyword, setPlaceKeyword] = useState('')
-  const [placeResult, setPlaceResult] = useState<PlaceResult[]>([])
-  const [from, setFrom] = useState<PlaceResult>(null)
-  const [to, setTo] = useState<PlaceResult>(null)
+  const [placeResult, setPlaceResult] = useState<POI[]>([])
+  const [from, setFrom] = useState<POI>(null)
+  const [to, setTo] = useState<POI>(null)
 
   const debouncedPlaceKeyword = useDebounce(placeKeyword, 200)
 
@@ -50,7 +50,7 @@ function PlaceInput() {
     setOpen(true)
   }
 
-  const handleUpdatePlace = (poi: PlaceResult) => {
+  const handleUpdatePlace = (poi: POI) => {
     if (target === '출발지') setFrom(poi)
     else setTo(poi)
     setOpen(false)
