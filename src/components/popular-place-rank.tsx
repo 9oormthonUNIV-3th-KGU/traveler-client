@@ -1,16 +1,25 @@
+'use client'
+
 import Image from 'next/image'
+import Cookies from 'js-cookie'
 
 import GoldMedalIcon from '~/assets/gold.svg'
 import SilverMedalIcon from '~/assets/silver.svg'
 import BronzeMedalIcon from '~/assets/bronze.svg'
 import TrophyIcon from '~/assets/trophy.svg'
 import { TMiniMap } from '~/components/t-mini-map'
+import { cn } from '~/utils/cn'
 
 function PopularPlaceRank() {
   return (
     <div className="w-full overflow-hidden rounded shadow">
       <TMiniMap />
-      <ol className="relative z-50 -mt-8 w-full overflow-hidden rounded bg-white shadow">
+      <ol
+        className={cn(
+          'relative z-10 -mt-8 w-full select-none overflow-hidden rounded bg-white shadow',
+          !Cookies.get('AccessToken') && 'pointer-events-none blur-sm',
+        )}
+      >
         <li className="relative flex cursor-pointer items-center justify-center px-5 py-4 transition hover:bg-primary-500 hover:text-white">
           <Image
             src={GoldMedalIcon}
