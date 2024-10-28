@@ -1,19 +1,28 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.has('AccessToken')
   const refreshToken = request.cookies.has('RefreshToken')
 
   if (accessToken && refreshToken) return NextResponse.next()
 
   if (!accessToken && refreshToken) {
+    await fetch('https://api.travelersenior.site/api/token/reissue', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${request.cookies.get('RefreshToken')}`,
+      },
+    })
     return NextResponse.next()
   }
 
-  return NextResponse.redirect(new URL('/login', request.url))
-}
+  if (
+    request.nextUrl.pathname.startsWith('/quit') ||
+    request.nextUrl.pathname.startsWith('/my-page')
+  )
+    return NextResponse.redirect(new URL('/login', request.url))
 
-export const config = {
-  matcher: ['/my-page/:path*', '/quit/:path*'],
+  return NextResponse.next()
 }

@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import Cookies from 'js-cookie'
 
 import Main from '~/assets/main.svg'
 import { PlaceInput } from '~/components/place-input'
@@ -13,20 +16,34 @@ export default function Home() {
     <div className="flex min-h-dvh flex-col justify-center px-5 text-center">
       <SiteHeader />
       <div className="flex w-full flex-1 flex-col items-center py-4">
-        <section className="mb-8 flex w-full flex-col items-center gap-2">
+        <section className="mb-12 flex w-full flex-col items-center gap-2">
           <h2 className="text-[22px] font-semibold text-gray-400">
             어디를 산책할까요?
           </h2>
           <PlaceInput />
         </section>
-        <section className="mb-7 flex w-full flex-col items-center gap-4">
+        <section className="mb-10 flex w-full flex-col items-center gap-4">
           <h2 className="text-[22px] font-semibold text-gray-950">
             내 주변 인기 있는 장소
           </h2>
           <PopularPlaceRank />
-          <span className="text-sm font-medium text-gray-500">
-            먼저, 위치정보를 허용해주세요!
-          </span>
+          {Cookies.get('AccessToken') ? (
+            <span className="text-sm font-medium text-gray-500">
+              먼저, 위치정보를 허용해주세요!
+            </span>
+          ) : (
+            <div className="flex w-full flex-col gap-3">
+              <span className="text-sm font-medium text-gray-500">
+                인기 있는 장소를 확인하기 위해서는 로그인 해주세요
+              </span>
+              <Link
+                href="/login"
+                className={cn(buttonVariants({ size: 'sm' }), 'w-full')}
+              >
+                로그인하기
+              </Link>
+            </div>
+          )}
         </section>
         <section className="flex w-full flex-col items-center">
           <h2 className="text-[22px] font-semibold text-gray-950">

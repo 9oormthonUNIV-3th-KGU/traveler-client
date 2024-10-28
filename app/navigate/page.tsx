@@ -64,6 +64,7 @@ export default function Navigate({
         <NavigateHeader
           from={start}
           to={end}
+          mode={mode}
           time={features[0].properties.totalTime}
           distance={features[0].properties.totalDistance}
         />

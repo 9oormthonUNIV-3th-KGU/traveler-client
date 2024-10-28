@@ -44,7 +44,7 @@ function TMiniMap() {
     }
   }, [isLocationAllowed, handleLocationPermission])
 
-  return <div id="map_div" className="aspect-square" />
+  return <div id="map_div" className="pointer-events-none aspect-square" />
 }
 
 export { TMiniMap }
