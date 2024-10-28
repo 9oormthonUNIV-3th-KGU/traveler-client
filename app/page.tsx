@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import Cookies from 'js-cookie'
+import { useEffect, useState } from 'react'
 
 import Main from '~/assets/main.svg'
 import { PlaceInput } from '~/components/place-input'
@@ -12,7 +13,11 @@ import { buttonVariants } from '~/components/ui/button'
 import { cn } from '~/utils/cn'
 
 export default function Home() {
-  console.log(Cookies.get('AccessToken'))
+  const [authenticated, setAuthenticated] = useState(false)
+
+  useEffect(() => {
+    if (Cookies.get('AccessToken') !== undefined) setAuthenticated(true)
+  }, [])
 
   return (
     <div className="flex min-h-dvh flex-col justify-center px-5 text-center">
@@ -29,7 +34,11 @@ export default function Home() {
             내 주변 인기 있는 장소
           </h2>
           <PopularPlaceRank />
-          {Cookies.get('AccessToken') === undefined ? (
+          {authenticated ? (
+            <span className="text-sm font-medium text-gray-500">
+              먼저, 위치정보를 허용해주세요!
+            </span>
+          ) : (
             <div className="flex w-full flex-col gap-3">
               <span className="text-sm font-medium text-gray-500">
                 인기 있는 장소를 확인하기 위해서는 로그인 해주세요
@@ -41,10 +50,6 @@ export default function Home() {
                 로그인하기
               </Link>
             </div>
-          ) : (
-            <span className="text-sm font-medium text-gray-500">
-              먼저, 위치정보를 허용해주세요!
-            </span>
           )}
         </section>
         <section className="flex w-full flex-col items-center">
