@@ -1,40 +1,15 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { useLocationPermission } from '~/hooks/use-location-permission'
 import type { TTMap } from '~/types/t-map'
-import type { Location } from '~/types/location'
 import { postRecommendLocation } from '~/apis/recommend'
 
 function TMiniMap() {
   const map = useRef<TTMap>()
-  const [places, setPlaces] = useState<Location[]>([])
   const { isLocationAllowed, handleLocationPermission } =
     useLocationPermission()
-
-  useEffect(() => {
-    const fetchPlaces = async () => {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { recommendLocations } = await postRecommendLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        })
-
-        setPlaces(
-          recommendLocations.toSorted(
-            (a, b) => (b.views ?? 0) - (a.views ?? 0),
-          ),
-        )
-      })
-    }
-
-    try {
-      fetchPlaces()
-    } catch (error) {
-      console.error('Unauthorized')
-    }
-  }, [])
 
   useEffect(() => {
     const { Tmapv3 } = window
@@ -49,13 +24,37 @@ function TMiniMap() {
             zoom: 13,
           })
 
-          const markers = []
-          markers.push(new Tmapv3.LatLng(coords.latitude, coords.longitude))
-          for (const place of places)
-            markers.push(new Tmapv3.LatLng(place.latitude, place.longitude))
-          for (const marker of markers) {
-            new Tmapv3.Marker({ position: marker, map: map.current })
+          const drawMarkers = async () => {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+              const markers = [
+                new Tmapv3.LatLng(coords.latitude, coords.longitude),
+              ]
+
+              try {
+                const { recommendLocations } = await postRecommendLocation({
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                })
+
+                const places = recommendLocations.toSorted(
+                  (a, b) => (b.views ?? 0) - (a.views ?? 0),
+                )
+
+                for (const place of places)
+                  markers.push(
+                    new Tmapv3.LatLng(place.latitude, place.longitude),
+                  )
+              } catch (error) {
+                console.error('Unauthorized')
+              }
+
+              for (const marker of markers) {
+                new Tmapv3.Marker({ position: marker, map: map.current })
+              }
+            })
           }
+
+          drawMarkers()
         },
         console.error,
         { enableHighAccuracy: true },
@@ -63,9 +62,13 @@ function TMiniMap() {
     } else {
       handleLocationPermission()
     }
-  }, [places, isLocationAllowed, handleLocationPermission])
+  }, [isLocationAllowed, handleLocationPermission])
 
-  return <div id="map_div" className="pointer-events-none aspect-square" />
+  return (
+    <div className="aspect-square">
+      <div id="map_div" className="pointer-events-none" />
+    </div>
+  )
 }
 
 export { TMiniMap }
