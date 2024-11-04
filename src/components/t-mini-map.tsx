@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Cookies from 'js-cookie'
 
 import { useLocationPermission } from '~/hooks/use-location-permission'
 import type { TTMap } from '~/types/t-map'
@@ -30,7 +29,11 @@ function TMiniMap() {
       })
     }
 
-    if (Cookies.get('AccessToken')) fetchPlaces()
+    try {
+      fetchPlaces()
+    } catch (error) {
+      console.error('Unauthorized')
+    }
   }, [])
 
   useEffect(() => {
