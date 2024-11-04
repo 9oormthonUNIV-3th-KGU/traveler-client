@@ -22,6 +22,8 @@ function AuthorizedPlaceRank() {
           longitude: position.coords.longitude,
         })
 
+        recommendLocations.sort((a, b) => (b.views ?? 0) - (a.views ?? 0))
+
         setPlaces(recommendLocations)
       })
     }
