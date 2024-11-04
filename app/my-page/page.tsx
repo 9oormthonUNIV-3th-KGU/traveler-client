@@ -1,7 +1,6 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 import { buttonVariants } from '~/components/ui/button'
 import { SiteHeader } from '~/components/site-header'
@@ -10,20 +9,12 @@ import { LogoutButton } from '~/components/logout-button'
 import { ROUTE } from '~/constants/route'
 import { getUserMy } from '~/apis/user'
 
-export default function MyPage() {
-  const [userInfo, setUserInfo] = useState<{
-    username: string
-    email: string
-  } | null>(null)
+export default async function MyPage() {
+  const cookieStore = cookies()
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const response = await getUserMy()
-      setUserInfo(response)
-    }
+  if (!cookieStore.has('AccessToken')) redirect(ROUTE.LOGIN)
 
-    fetchUserInfo()
-  }, [])
+  const userInfo = await getUserMy()
 
   return (
     <div className="flex min-h-dvh flex-col justify-center px-5">
