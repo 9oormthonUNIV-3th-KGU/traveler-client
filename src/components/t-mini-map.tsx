@@ -41,39 +41,20 @@ function TMiniMap() {
 
     if (isLocationAllowed) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        ({ coords }) => {
           map.current = new Tmapv3.Map('map_div', {
-            center: new Tmapv3.LatLng(
-              position.coords.latitude,
-              position.coords.longitude,
-            ),
+            center: new Tmapv3.LatLng(coords.latitude, coords.longitude),
             width: '100%',
             height: '100%',
             zoom: 13,
           })
 
-          const currentLatLng = new Tmapv3.LatLng(
-            position.coords.latitude,
-            position.coords.longitude,
-          )
-
-          new Tmapv3.Marker({
-            position: currentLatLng,
-            map: map.current,
-          })
-
-          for (const place of places) {
-            const placeLatLng = new Tmapv3.LatLng(
-              place.latitude,
-              place.longitude,
-            )
-
-            console.log(placeLatLng)
-
-            new Tmapv3.Marker({
-              position: placeLatLng,
-              map: map.current,
-            })
+          const markers = []
+          markers.push(new Tmapv3.LatLng(coords.latitude, coords.longitude))
+          for (const place of places)
+            markers.push(new Tmapv3.LatLng(place.latitude, place.longitude))
+          for (const marker of markers) {
+            new Tmapv3.Marker({ position: marker, map: map.current })
           }
         },
         console.error,
