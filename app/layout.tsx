@@ -33,7 +33,10 @@ export default function RootLayout({
         />
       </head>
       <body className={cn(pretendard.variable, 'font-sans antialiased')}>
-        <div className="mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 text-gray-950">
+        <div
+          className="mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 text-gray-950"
+          vaul-drawer-wrapper=""
+        >
           {children}
         </div>
       </body>
