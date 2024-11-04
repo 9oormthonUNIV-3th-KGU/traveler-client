@@ -23,7 +23,7 @@ function TMiniMap() {
             ),
             width: '100%',
             height: '100%',
-            zoom: 16,
+            zoom: 13,
           })
 
           const currentLatLng = new Tmapv3.LatLng(
