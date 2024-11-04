@@ -1,14 +1,37 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { useLocationPermission } from '~/hooks/use-location-permission'
+import { useEffect, useRef, useState } from 'react'
+import Cookies from 'js-cookie'
 
+import { useLocationPermission } from '~/hooks/use-location-permission'
 import type { TTMap } from '~/types/t-map'
+import type { Location } from '~/types/location'
+import { postRecommendLocation } from '~/apis/recommend'
 
 function TMiniMap() {
   const map = useRef<TTMap>()
+  const [places, setPlaces] = useState<Location[]>([])
   const { isLocationAllowed, handleLocationPermission } =
     useLocationPermission()
+
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { recommendLocations } = await postRecommendLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        })
+
+        setPlaces(
+          recommendLocations.toSorted(
+            (a, b) => (b.views ?? 0) - (a.views ?? 0),
+          ),
+        )
+      })
+    }
+
+    if (Cookies.get('AccessToken')) fetchPlaces()
+  }, [])
 
   useEffect(() => {
     const { Tmapv3 } = window
@@ -35,6 +58,20 @@ function TMiniMap() {
             position: currentLatLng,
             map: map.current,
           })
+
+          for (const place of places) {
+            const placeLatLng = new Tmapv3.LatLng(
+              place.latitude,
+              place.longitude,
+            )
+
+            console.log(placeLatLng)
+
+            new Tmapv3.Marker({
+              position: placeLatLng,
+              map: map.current,
+            })
+          }
         },
         console.error,
         { enableHighAccuracy: true },
@@ -42,7 +79,7 @@ function TMiniMap() {
     } else {
       handleLocationPermission()
     }
-  }, [isLocationAllowed, handleLocationPermission])
+  }, [places, isLocationAllowed, handleLocationPermission])
 
   return <div id="map_div" className="pointer-events-none aspect-square" />
 }
