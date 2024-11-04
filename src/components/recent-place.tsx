@@ -6,9 +6,9 @@ import Image from 'next/image'
 import { Card } from '~/components/ui/card'
 import XIcon from '~/assets/x.svg'
 import { postSearchDelete, postSearchGet } from '~/apis/search'
-import type { SearchHistory } from '~/types/search-history'
+import type { Location } from '~/types/location'
 
-function RecentPlaceItem({ place }: { place: SearchHistory }) {
+function RecentPlaceItem({ place }: { place: Location }) {
   const handleDelete = async () => {
     const response = await postSearchDelete(place.id)
     if (response === 200) location.reload()
@@ -26,7 +26,7 @@ function RecentPlaceItem({ place }: { place: SearchHistory }) {
 }
 
 function RecentPlace() {
-  const [places, setPlaces] = useState<SearchHistory[] | null>(null)
+  const [places, setPlaces] = useState<Location[] | null>(null)
 
   useEffect(() => {
     const fetchPlaces = async () => {

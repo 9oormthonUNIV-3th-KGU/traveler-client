@@ -1,5 +1,5 @@
 import { travelerInstance } from '~/apis/instance'
-import type { SearchHistory } from '~/types/search-history'
+import type { Location } from '~/types/location'
 
 const postSearchDelete = async (locationId: number) => {
   const response = await travelerInstance.post(
@@ -8,7 +8,7 @@ const postSearchDelete = async (locationId: number) => {
   return response.status
 }
 
-const postSearchGet = async (): Promise<SearchHistory[]> => {
+const postSearchGet = async (): Promise<Location[]> => {
   const response = await travelerInstance.post('/search/get')
   return response.data
 }

@@ -1,8 +1,9 @@
-interface SearchHistory {
+interface Location {
   id: number
   name: string
   latitude: number
   longitude: number
+  views?: number
 }
 
-export type { SearchHistory }
+export type { Location }
