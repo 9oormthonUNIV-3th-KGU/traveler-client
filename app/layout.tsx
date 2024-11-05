@@ -3,7 +3,6 @@ import localFont from 'next/font/local'
 
 import '~/styles/globals.css'
 import { cn } from '~/utils/cn'
-import { ScrollArea } from '~/components/ui/scroll-area'
 
 const pretendard = localFont({
   src: './fonts/pretendard-variable.woff2',
@@ -34,14 +33,12 @@ export default function RootLayout({
         />
       </head>
       <body className={cn(pretendard.variable, 'font-sans antialiased')}>
-        <ScrollArea className="h-dvh" hideScrollbar>
-          <div
-            className="mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 text-gray-950"
-            vaul-drawer-wrapper=""
-          >
-            {children}
-          </div>
-        </ScrollArea>
+        <div
+          className="mx-auto min-h-dvh max-w-screen-sm bg-gradient-to-b from-white to-gray-100 text-gray-950"
+          vaul-drawer-wrapper=""
+        >
+          {children}
+        </div>
       </body>
     </html>
   )
