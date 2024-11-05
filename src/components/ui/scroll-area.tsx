@@ -8,7 +8,7 @@ import { cn } from '~/utils/cn'
 const ScrollArea = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
-    hideScrollbar: boolean
+    hideScrollbar?: boolean
   }
 >(({ className, children, hideScrollbar = false, ...props }, ref) => (
   <ScrollAreaPrimitive.Root
