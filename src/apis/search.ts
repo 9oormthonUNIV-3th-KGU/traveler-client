@@ -1,8 +1,14 @@
 import { travelerInstance } from '~/apis/instance'
+import type { Location } from '~/types/location'
 
-const postSearchGet = async (): Promise<
-  { locationName: string; latitude: number; longitude: number }[]
-> => {
+const postSearchDelete = async (locationId: number) => {
+  const response = await travelerInstance.post(
+    `/search/delete?locationId=${locationId}`,
+  )
+  return response.status
+}
+
+const postSearchGet = async (): Promise<Location[]> => {
   const response = await travelerInstance.post('/search/get')
   return response.data
 }
@@ -16,4 +22,4 @@ const postSearchLocation = async (data: {
   return response.status
 }
 
-export { postSearchGet, postSearchLocation }
+export { postSearchDelete, postSearchGet, postSearchLocation }

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '~/components/ui/button'
 import {
@@ -22,6 +22,7 @@ import { cn } from '~/utils/cn'
 function PlaceInput() {
   const router = useRouter()
 
+  const inputRef = useRef<HTMLInputElement>(null)
   const [open, setOpen] = useState(false)
   const [target, setTarget] = useState<'출발지' | '도착지' | null>()
   const [placeKeyword, setPlaceKeyword] = useState('')
@@ -50,6 +51,10 @@ function PlaceInput() {
     setPlaceResult([])
     setPlaceKeyword((target === '출발지' ? from?.name : to?.name) || '')
     setOpen(true)
+
+    setTimeout(() => {
+      inputRef.current?.focus()
+    }, 100)
   }
 
   const handleUpdatePlace = (poi: POI) => {
@@ -139,6 +144,7 @@ function PlaceInput() {
                 placeholder={`${target} 입력`}
                 value={placeKeyword}
                 onChange={(e) => setPlaceKeyword(e.target.value)}
+                ref={inputRef}
               />
               <button type="button" className="size-8">
                 <Image src={SearchIcon} alt="검색" />
